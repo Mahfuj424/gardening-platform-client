@@ -5,6 +5,7 @@ import { BiSolidMessageDetail } from "react-icons/bi";
 import { MdNotificationsActive } from "react-icons/md";
 import { TiWeatherSunny } from "react-icons/ti";
 import { BsMoonStarsFill } from "react-icons/bs";
+import { IoSearch } from "react-icons/io5";
 
 export default function NavBar({
   darkMode,
@@ -33,11 +34,16 @@ export default function NavBar({
         </div>
 
         {/* Search Bar */}
-        <input
-          type="text"
-          placeholder="Search Friends"
-          className="w-[40%] -ms-40 px-4 py-2 rounded-md border dark:text-white dark:border-none bg-gray-100 border-gray-300 dark:bg-gray-900 outline-none dark:focus:ring-0 dark:outline-none focus:outline-none focus:ring-2 focus:ring-[#00984b]"
-        />
+        <div className="relative w-[40%] -ms-40">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+            <IoSearch className="text-gray-500 dark:text-gray-300" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search Friends"
+            className="pl-10 w-full px-4 py-2 rounded-md border dark:text-white dark:border-none bg-gray-100 border-gray-300 dark:bg-gray-900 outline-none dark:focus:ring-0 focus:ring-2 focus:ring-[#00984b]"
+          />
+        </div>
 
         {/* Icons */}
         <div className="flex gap-5 items-center relative">
@@ -93,24 +99,41 @@ export default function NavBar({
                   />
                   <div className="ml-3 dark:text-white">
                     <p className="text-sm font-semibold">Stell Johnson</p>
-                    <p className="text-sm text-gray-600 dark:text-white">@mohnson</p>
+                    <p className="text-sm text-gray-600 dark:text-white">
+                      @mohnson
+                    </p>
                   </div>
                 </div>
                 <hr />
                 <ul>
-                  <li onClick={() => setDropdownOpen(!dropdownOpen)} className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer">
+                  <li
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
+                  >
                     Upgrade To Premium
                   </li>
-                  <li onClick={() => setDropdownOpen(!dropdownOpen)} className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer">
+                  <li
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
+                  >
                     My Billing
                   </li>
-                  <li onClick={() => setDropdownOpen(!dropdownOpen)} className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer">
+                  <li
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
+                  >
                     Advatacing
                   </li>
-                  <li onClick={() => setDropdownOpen(!dropdownOpen)} className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer">
+                  <li
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
+                  >
                     My Account
                   </li>
-                  <li onClick={() => setDropdownOpen(!dropdownOpen)} className="flex justify-between items-center px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer">
+                  <li
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="flex justify-between items-center px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
+                  >
                     <button
                       className="block w-full text-left py-2 "
                       onClick={toggleDarkMode}

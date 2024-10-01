@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { Pagination, Navigation } from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
 import { useRef } from 'react';
 
 const Stories = () => {
@@ -40,7 +40,7 @@ const Stories = () => {
         navigation={false} // Disable default navigation
         pagination={{ clickable: true }}
         loop={true}
-        modules={[Pagination, Navigation]}
+        modules={[ Navigation]}
       >
         {stories.map((story, index) => (
           <SwiperSlide key={index}>

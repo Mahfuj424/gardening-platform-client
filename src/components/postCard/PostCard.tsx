@@ -1,11 +1,17 @@
 // components/PostCard.tsx
 import React from "react";
+import { BiDislike, BiLike } from "react-icons/bi";
+import { FaRegComment } from "react-icons/fa";
+import { PiShareFatLight } from "react-icons/pi";
 
 const PostCard = () => {
   return (
     <div>
       {[1, 2, 3, 4, 5, 6].map((item, index) => (
-        <div key={index} className="dark:bg-darkCard bg-white shadow-md p-4 rounded-lg mt-4">
+        <div
+          key={index}
+          className="dark:bg-darkCard bg-white shadow-md p-4 rounded-lg mt-4"
+        >
           {/* Post Header */}
           <div className="flex items-center space-x-3">
             <img
@@ -20,6 +26,9 @@ const PostCard = () => {
               <p className="text-xs text-gray-400">2 hours ago</p>
             </div>
           </div>
+          <div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos a rem nihil eum illum, dicta iste consectetur vitae, iure dolores odio autem minima libero doloribus. Sunt asperiores quae pariatur accusantium?
+          </div>
 
           {/* Post Image */}
           <img
@@ -29,16 +38,38 @@ const PostCard = () => {
           />
 
           {/* Post Actions */}
-          <div className="flex justify-between mt-3 text-gray-400">
-            <div className="flex items-center space-x-2">
-              <i className="fas fa-heart text-red-500"></i>
-              <span>1,300</span>
+          <div className="flex justify-between px-3 mt-3 text-gray-400 ">
+            <div>
+              <h1>12k</h1>
             </div>
-            <div className="flex items-center space-x-2">
-              <i className="fas fa-comment"></i>
-              <span>260</span>
+            <div>
+              <span>5k</span>
             </div>
-            <i className="fas fa-share"></i>
+            <div>
+              <span>1k</span>
+            </div>
+            <div>
+              <span>500</span>
+            </div>
+          </div>
+
+          <div className="flex justify-between px-3 mt-3 text-gray-400 border-y py-2 border-gray-400 dark:border-secondary">
+            <div className="flex items-center gap-0.5 cursor-pointer">
+              <BiLike className="text-2xl" />
+              <span>Like</span>
+            </div>
+            <div className="flex items-center gap-0.5 cursor-pointer">
+              <BiDislike className="text-2xl" />
+              <span>DisLike</span>
+            </div>
+            <div className="flex items-center gap-1 cursor-pointer">
+              <FaRegComment className="text-2xl" />
+              <span>Comment</span>
+            </div>
+            <div className="flex items-center gap-1 cursor-pointer">
+              <PiShareFatLight className="text-2xl " />
+              <span>Share</span>
+            </div>
           </div>
 
           {/* Post Comments */}

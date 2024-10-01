@@ -1,22 +1,36 @@
-// components/WhatsOnYourMind.tsx
-
+import React, { useState } from "react";
+import { MdVideoCall } from "react-icons/md";
+import { RiImageAddFill } from "react-icons/ri";
+import CreatePostModal from "../modal/CreatePostModal";
 
 const WhatsOnYourMind = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
   return (
-    <div className="dark:bg-darkCard bg-white shadow-md p-4 rounded-lg mt-4 flex items-center space-x-3">
-      <input
-        type="text"
-        placeholder="What do you have in mind?"
-        className="flex-grow dark:bg-darkBg bg-gray-100 p-2 rounded-md dark:text-white text-black placeholder-gray-400 outline-none"
-      />
-      <div className="flex space-x-3">
-        <button className="bg-pink-500 p-2 rounded-full">
-          <i className="fas fa-image text-white"></i> {/* Image Icon */}
-        </button>
-        <button className="bg-blue-500 p-2 rounded-full">
-          <i className="fas fa-video text-white"></i> {/* Video Icon */}
-        </button>
+    <div>
+      {/* The input box and buttons */}
+      <div className="dark:bg-darkCard bg-white shadow-md p-4 rounded-lg mt-4 flex items-center space-x-3">
+        <input
+          type="text"
+          placeholder="What do you have in mind?"
+          className="flex-grow dark:bg-darkBg cursor-pointer bg-gray-100 p-2 rounded-md dark:text-white text-black placeholder-gray-400 outline-none"
+          onClick={openModal} // Open modal on click
+        />
+        <div className="flex space-x-3">
+          <button className="bg-pink-500 p-1 rounded-full" onClick={openModal}>
+            <RiImageAddFill className="text-xl" />
+          </button>
+          <button className="bg-blue-500 p-1 rounded-full" onClick={openModal}>
+            <MdVideoCall className="text-xl" />
+          </button>
+        </div>
       </div>
+
+      {/* The modal */}
+      <CreatePostModal isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 };
