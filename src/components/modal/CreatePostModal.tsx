@@ -1,7 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import the styles for Quill editor
 
 const CreatePostModal = ({ isOpen, onClose }: any) => {
+  const { register, handleSubmit, reset, watch } = useForm();
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]); // Store image previews (local URLs)
+  const [editorTitle, setEditorTitle] = useState(""); // State for title
+  const [editorContent, setEditorContent] = useState(""); // State for content
+  const imgbbApiKey = process.env.REACT_APP_IMGBB_API_KEY;
+
+  // Watch for file changes in the input field
+  const selectedFiles = watch("images");
+
   // Close the modal if clicked outside
   const handleOutsideClick = (e: any) => {
     if (e.target.id === "modal-overlay") {
@@ -22,33 +35,81 @@ const CreatePostModal = ({ isOpen, onClose }: any) => {
     };
   }, [isOpen]);
 
-  // State for the form data
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState("Gardening");
+  // Preview selected images
+  useEffect(() => {
+    if (selectedFiles && selectedFiles.length > 0) {
+      const previews = Array.from(selectedFiles).map((file: any) =>
+        URL.createObjectURL(file)
+      );
+      setImagePreviews(previews);
 
+      // Clean up object URLs after the component unmounts to prevent memory leaks
+      return () => {
+        previews.forEach((url) => URL.revokeObjectURL(url));
+      };
+    }
+  }, [selectedFiles]);
 
-  // Dropdown options for gardening categories
-  const categories = [
-    "Gardening",
-    "Indoor Plants",
-    "Landscaping",
-    "Vegetable Gardens",
-    "Flower Gardens",
-    "Herb Gardens",
-  ];
+  // Upload images to imgbb and return the URLs
+  const uploadImagesToImgbb = async (files: File[]) => {
+    const promises = Array.from(files).map((file) => {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      return axios
+        .post(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, formData)
+        .then((response) => response.data.data.url)
+        .catch((error) => console.error("Error uploading image:", error));
+    });
+
+    const urls = await Promise.all(promises);
+    return urls;
+  };
+
+  // Handle form submission
+  const onSubmit = async (data: any) => {
+    const { category, images } = data;
+
+    // Upload selected images
+    if (images && images.length > 0) {
+      try {
+        const uploadedImageUrls = await uploadImagesToImgbb(images);
+        // You can now submit the data along with image URLs
+        const postData = {
+          title: editorTitle, // Use the state value for title
+          content: editorContent, // Use the state value for content
+          category,
+          imageUrls: uploadedImageUrls, // The URLs of uploaded images
+        };
+        console.log(postData);
+      } catch (error) {
+        console.error("Error uploading images:", error);
+      }
+    }
+
+    // Reset the form after submission
+    reset();
+    onClose(); // Close modal after submission
+  };
+
+  // Remove image from preview
+  const removeImage = (index: number) => {
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
 
   if (!isOpen) return null;
 
   return (
     <div
       id="modal-overlay"
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+      className="fixed inset-0  bg-black bg-opacity-50 flex justify-center items-center z-50"
       onClick={handleOutsideClick}
     >
       <div className="bg-white dark:bg-darkCard p-6 rounded-md w-full max-w-xl mx-auto relative z-50">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-black dark:text-white">Create Post</h2>
+          <h2 className="text-xl font-semibold text-black dark:text-white">
+            Create Post
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"
@@ -57,57 +118,96 @@ const CreatePostModal = ({ isOpen, onClose }: any) => {
           </button>
         </div>
 
-        {/* Title input field */}
-        <input
-          type="text"
-          placeholder="Enter title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 mb-4 border rounded-md dark:bg-darkBg dark:text-white"
-        />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* Title input field using ReactQuill */}
+          <div className="mb-4">
+            <label className="block mb-1">Title:</label>
+            <ReactQuill
+              value={editorTitle}
+              onChange={setEditorTitle}
+              placeholder="Enter your title here"
+              className="dark:bg-darkBg dark:text-white"
+            />
+          </div>
 
-        {/* Content textarea */}
-        <textarea
-          placeholder="Write your content..."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="w-full p-2 mb-4 border rounded-md dark:bg-darkBg dark:text-white"
-        ></textarea>
+          {/* Content textarea using ReactQuill */}
+          <div className="mb-4">
+            <label className="block mb-1">Content:</label>
+            <ReactQuill
+              value={editorContent}
+              onChange={setEditorContent}
+              placeholder="Write your content here..."
+              className="dark:bg-darkBg dark:text-white"
+            />
+          </div>
 
-        {/* Category dropdown */}
-        <div className="mb-4">
-          <label htmlFor="category" className="block mb-1">
-            Category:
-          </label>
-          <select
-            id="category"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full p-2 border rounded-md text-black dark:bg-darkBg dark:text-white"
-          >
-            {categories.map((category, index) => (
-              <option
-                className="bg-custom-gradient"
-                key={index}
-                value={category}
-              >
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* Category dropdown */}
+          <div className="mb-4">
+            <label htmlFor="category" className="block mb-1">
+              Category:
+            </label>
+            <select
+              id="category"
+              {...register("category", { required: true })}
+              className="w-full p-2 border rounded-md text-black dark:bg-darkBg dark:text-white"
+            >
+              <option value="Gardening">Gardening</option>
+              <option value="Indoor Plants">Indoor Plants</option>
+              <option value="Landscaping">Landscaping</option>
+              <option value="Vegetable Gardens">Vegetable Gardens</option>
+              <option value="Flower Gardens">Flower Gardens</option>
+              <option value="Herb Gardens">Herb Gardens</option>
+            </select>
+          </div>
 
-        {/* Image preview section */}
-        <div className="border cursor-pointer border-dashed border-black dark:border-gray-300 h-52 text-center mb-2 flex justify-center items-center">
-          <p className="text-gray-300">Add photos/videos or drag and drop</p>
-        </div>
+          {/* Multiple Image Upload */}
+          <div className="border border-dashed border-black dark:border-gray-300 text-center mb-2 flex flex-wrap items-center justify-center relative w-full min-h-[208px]">
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              {...register("images")}
+              className="absolute opacity-0 w-full h-full cursor-pointer"
+            />
+            {!imagePreviews.length ? (
+              <p className="text-gray-300">
+                Add photos/videos or drag and drop
+              </p>
+            ) : (
+              <div className="flex flex-wrap gap-2 justify-start w-full">
+                {imagePreviews.map((url, index) => (
+                  <div
+                    key={index}
+                    className="relative w-20 h-20 md:w-24 md:h-24"
+                  >
+                    <img
+                      src={url}
+                      alt="Preview"
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                    >
+                      &#10005;
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
-        {/* Add to post button */}
-        <div>
-          <button className="bg-custom-gradient text-black font-semibold p-2 rounded-md w-full">
-            Add to your post
-          </button>
-        </div>
+          {/* Add to post button */}
+          <div>
+            <button
+              type="submit"
+              className="bg-custom-gradient text-black font-semibold p-2 rounded-md w-full"
+            >
+              Add to your post
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

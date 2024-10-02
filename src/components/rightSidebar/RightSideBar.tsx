@@ -10,10 +10,10 @@ const RightSidebar = () => {
 
 
   return (
-    <div className="dark:bg-darkCard bg-white shadow-md p-4 rounded-lg space-y-4 mt-4">
+    <div className="dark:bg-darkCard w-[400px] bg-white shadow-md p-4 rounded-lg space-y-4 mt-4">
       {/* People You May Know */}
       <div>
-        <h2 className="text-white font-semibold mb-3">People you may know</h2>
+        <h2 className="dark:text-white font-semibold mb-3">People you may know</h2>
         {people.map((person, index) => (
           <div key={index} className="flex justify-between items-center mb-3">
             <div className="flex items-center space-x-2">
@@ -27,7 +27,7 @@ const RightSidebar = () => {
                 <p className="text-xs text-gray-400">{person.following} Following</p>
               </div>
             </div>
-            <button className="bg-custom-gradient text-black font-semibold px-4 py-1 rounded-lg">
+            <button className="bg-custom-gradient text-white font-semibold px-4 py-1 rounded-lg">
               Follow
             </button>
           </div>

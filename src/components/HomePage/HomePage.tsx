@@ -1,26 +1,21 @@
-// pages/index.tsx
-
 import WhatsOnYourMind from "../post/WhatsOnYourMind";
 import PostCard from "../postCard/PostCard";
 import RightSidebar from "../rightSidebar/RightSideBar";
-import Stories from "../stories/Stories";
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen dark:bg-darkBg text-white bg-gray-100 p-4 ms-48">
-      <div className="container mx-auto lg:flex lg:justify-between gap-8">
-        {/* Main Content */}
-        <div className="lg:w-[70%] lg:pr-8">
-          {/* Stories */}
-          <Stories />
-          {/* What's on Your Mind */}
+    <div className="flex justify-around w-full px-5">
+      {/* Left content area */}
+      <div className="">
+        <div>
           <WhatsOnYourMind />
-          {/* Post Feed */}
-          <PostCard />
         </div>
-        {/* Right Sidebar */}
-        <div className="lg:w-1/4 fixed right-5 top-22 rounded-lg overflow-y-auto dark:bg-darkBg lg:block">
-          {/* Use 1/3 width for the sidebar */}
+        <PostCard />
+      </div>
+
+      {/* Fixed Right Sidebar */}
+      <div className="w-72">
+        <div className="fixed top-16 pt-2 right-3 h-screen">
           <RightSidebar />
         </div>
       </div>

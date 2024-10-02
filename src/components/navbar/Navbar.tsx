@@ -34,14 +34,14 @@ export default function NavBar({
         </div>
 
         {/* Search Bar */}
-        <div className="relative w-[40%] -ms-40">
+        <div className="relative w-[45%] -ms-36">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3">
             <IoSearch className="text-gray-500 dark:text-gray-300" />
           </div>
           <input
             type="text"
             placeholder="Search Friends"
-            className="pl-10 w-full px-4 py-2 rounded-md border dark:text-white dark:border-none bg-gray-100 border-gray-300 dark:bg-gray-900 outline-none dark:focus:ring-0 focus:ring-2 focus:ring-[#00984b]"
+            className="pl-10 w-full px-4 py-2 rounded-md border dark:text-white dark:border-none bg-gray-100 border-gray-300 dark:bg-darkModal outline-none dark:focus:ring-0 focus:ring-2 focus:ring-[#00984b]"
           />
         </div>
 

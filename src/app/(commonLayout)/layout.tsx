@@ -1,46 +1,24 @@
-// pages/_app.tsx
-"use client";
-import { useState, useEffect } from "react";
-import "./globals.css";
-import NavBar from "@/components/navbar/Navbar"; // Adjust path as necessary
+import LeftSidebar from "@/components/leftSidebar/LeftSidebar";
+import React, { ReactNode } from "react";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [darkMode, setDarkMode] = useState(false);
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-  // Sync dark mode with local storage and apply/remove class
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setDarkMode(true);
-      document.documentElement.classList.add("dark");
-    } else {
-      setDarkMode(false);
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    if (!darkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  };
-
-  return (
-    <html lang="en">
-      <body className={`${darkMode ? "dark" : ""}`}>
-        {/* Pass darkMode and toggleDarkMode as props to NavBar */}
-        <NavBar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-        {children}
-      </body>
-    </html>
-  );
+interface CommonLayoutProps {
+  children: ReactNode;
 }
+
+const CommonLayout: React.FC<CommonLayoutProps> = ({ children }) => {
+  return (
+    <div className="flex justify-between mt-[70px] dark:bg-darkBg bg-gray-100">
+      {/* Left Sidebar */}
+      <div className="w-1/5 ps-5 fixed pt-5 top-[70px] left-0 h-full bg-gray-100 dark:bg-darkBg">
+        <LeftSidebar />
+      </div>
+
+      {/* Main content */}
+      <div className="w-4/5 ml-[20%]">{children}</div>
+    </div>
+  );
+};
+
+export default CommonLayout;
