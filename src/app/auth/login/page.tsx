@@ -1,7 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
+import { loginUser } from '@/services/actions/loginUser';
+import setAccessTokenToCookies from '@/services/actions/setAccessTokenToCookie';
+import { storeUserInfo } from '@/services/authServices';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebookF } from 'react-icons/fa';
+import { toast } from 'sonner';
 
 interface FormData {
   email: string;
@@ -9,6 +15,7 @@ interface FormData {
 }
 
 const LoginPage = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -24,7 +31,23 @@ const LoginPage = () => {
 
   // Handle form submission
   const onSubmit = async (data: FormData) => {
-console.log(data);
+    try {
+      const res = await loginUser(data);
+      console.log(res);
+      if (res?.success) {
+        storeUserInfo(res?.token);
+        setAccessTokenToCookies(res?.token, {
+          redirect: "/",
+        });
+        toast.success("User login successfully");
+
+        router.push("/");
+      } else {
+        toast(res?.message);
+      }
+    } catch (error:any) {
+      toast.error(error.message);
+    }
   };
 
   return (

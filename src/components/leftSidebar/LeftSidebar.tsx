@@ -1,3 +1,5 @@
+'use client'
+import { getUserInfo } from "@/services/authServices";
 import Link from "next/link";
 
 interface SidebarItem {
@@ -52,13 +54,17 @@ export default function LeftSidebar() {
   ];
 
 
+  const userInfo= getUserInfo()
+
+
+
   return (
     <div>
       <Link href={'/profile'} className="flex items-center gap-3 mb-5">
           <img
             className="w-10 h-10 rounded-full ms-2"
-            src="https://i.ibb.co/xm54tqk/profile-Image.jpg"
-            alt=""
+            src={userInfo?.profileImage}
+            alt="profile"
           />
           <h1 className="text-lg font-semibold dark:text-white">Profile</h1>
         </Link>

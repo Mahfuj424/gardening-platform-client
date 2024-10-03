@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import "./globals.css";
 import NavBar from "@/components/navbar/Navbar"; // Adjust path as necessary
 import { usePathname } from "next/navigation";
+import Providers from "@/lib/providers/Providers";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -40,13 +42,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${darkMode ? "dark" : ""}`}>
-        {/* Pass darkMode and toggleDarkMode as props to NavBar */}
-        {path === "/auth/login" || path === '/auth/register' ? (
-          ""
-        ) : (
-          <NavBar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-        )}
-        {children}
+        <Providers>
+          {/* Pass darkMode and toggleDarkMode as props to NavBar */}
+          {path === "/auth/login" || path === "/auth/register" ? (
+            ""
+          ) : (
+            <NavBar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+          )}
+          {children}
+          <Toaster position="top-center" />
+        </Providers>
       </body>
     </html>
   );

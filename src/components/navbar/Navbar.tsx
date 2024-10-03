@@ -6,6 +6,8 @@ import { MdNotificationsActive } from "react-icons/md";
 import { TiWeatherSunny } from "react-icons/ti";
 import { BsMoonStarsFill } from "react-icons/bs";
 import { IoSearch } from "react-icons/io5";
+import { logoutUser } from "@/services/actions/logoutUser";
+import { getUserInfo } from "@/services/authServices";
 
 export default function NavBar({
   darkMode,
@@ -17,6 +19,12 @@ export default function NavBar({
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null); // Ref for the dropdown menu
+  const userInfo = getUserInfo();
+  console.log(userInfo)
+  const handleLogout=()=>{
+    logoutUser(router)
+    router.push('/auth/login')
+  }
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white dark:bg-darkCard shadow-md z-50">
@@ -82,7 +90,7 @@ export default function NavBar({
           {/* Profile Image with Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <img
-              src={"https://i.ibb.co.com/xm54tqk/profile-Image.jpg"}
+              src={userInfo?.profileImage}
               alt={"profile"}
               className="w-10 h-10 rounded-full cursor-pointer"
               onClick={() => setDropdownOpen(!dropdownOpen)} // Toggle dropdown on click
@@ -90,17 +98,17 @@ export default function NavBar({
 
             {/* Dropdown Menu */}
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-darkModal rounded-lg shadow-lg z-50">
+              <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-darkModal rounded-lg shadow-lg z-50">
                 <div className="flex items-center px-4 py-3">
                   <img
-                    src={"https://i.ibb.co.com/xm54tqk/profile-Image.jpg"}
+                    src={userInfo?.profileImage}
                     alt={"Stell Johnson"}
                     className="w-10 h-10 rounded-full"
                   />
                   <div className="ml-3 dark:text-white">
-                    <p className="text-sm font-semibold">Stell Johnson</p>
+                    <p className="text-sm font-semibold">{userInfo?.name}</p>
                     <p className="text-sm text-gray-600 dark:text-white">
-                      @mohnson
+                      {userInfo?.email}
                     </p>
                   </div>
                 </div>
@@ -151,7 +159,7 @@ export default function NavBar({
                       )}
                     </button>
                   </li>
-                  <li className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer">
+                  <li onClick={handleLogout} className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer">
                     Log Out
                   </li>
                 </ul>
