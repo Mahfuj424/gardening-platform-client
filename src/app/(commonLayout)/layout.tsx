@@ -16,7 +16,7 @@ const CommonLayout: React.FC<CommonLayoutProps> = ({ children }) => {
       </div>
 
       {/* Main content */}
-      <div className="w-4/5 ml-[20%] bg-gray-100 dark:bg-darkBg h-screen">{children}</div>
+      <div className="w-4/5 ml-[20%] bg-gray-100 dark:bg-darkBg">{children}</div>
     </div>
   );
 };

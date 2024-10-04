@@ -37,7 +37,7 @@ const UserModal: React.FC<UserModalProps> = ({ user }) => {
         </div>
       </div>
       <div className="flex justify-between mt-4">
-        <div className="bg-custom-gradient disabled:hover py-1 rounded-md px-3 flex gap-1 items-center">
+        <div className="bg-custom-gradient cursor-pointer disabled:hover py-1 rounded-md px-3 flex gap-1 items-center">
           <SiMessenger className="text-white"/>
           <h1 className="font-semibold text-white">Message</h1>
         </div>

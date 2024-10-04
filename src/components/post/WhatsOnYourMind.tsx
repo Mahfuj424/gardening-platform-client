@@ -13,7 +13,7 @@ const WhatsOnYourMind = () => {
   return (
     <div>
       {/* The input box and buttons */}
-      <div className="dark:bg-darkCard bg-white shadow-md p-4 rounded-lg mt-4 flex items-center space-x-3">
+      <div className="dark:bg-darkCard w-full mx-auto bg-white shadow-md p-4 rounded-lg mt-4 flex items-center space-x-3">
         <input
           type="text"
           placeholder="What do you have in mind?"
