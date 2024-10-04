@@ -1,4 +1,4 @@
-"use client";
+
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { BiSolidMessageDetail } from "react-icons/bi";
@@ -20,7 +20,6 @@ export default function NavBar({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null); // Ref for the dropdown menu
   const userInfo = getUserInfo();
-  console.log(userInfo)
   const handleLogout=()=>{
     logoutUser(router)
     router.push('/auth/login')
@@ -160,7 +159,7 @@ export default function NavBar({
                     </button>
                   </li>
                   <li onClick={handleLogout} className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer">
-                    Log Out
+                    LogOut
                   </li>
                 </ul>
               </div>

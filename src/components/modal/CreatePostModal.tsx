@@ -1,16 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+'use client'
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import the styles for Quill editor
+import { useCreatePostMutation } from "@/redux/api/post";
+import { toast } from "sonner";
+import { getUserInfo } from "@/services/authServices";
 
 const CreatePostModal = ({ isOpen, onClose }: any) => {
   const { register, handleSubmit, reset, watch } = useForm();
   const [imagePreviews, setImagePreviews] = useState<string[]>([]); // Store image previews (local URLs)
   const [editorTitle, setEditorTitle] = useState(""); // State for title
   const [editorContent, setEditorContent] = useState(""); // State for content
-  const imgbbApiKey = process.env.REACT_APP_IMGBB_API_KEY;
+  const [createPost]=useCreatePostMutation()
+  const userInfo = getUserInfo()
+  const imgbbApiKey = "2167989ee53b7a504211edcff02ebe5b"
 
   // Watch for file changes in the input field
   const selectedFiles = watch("images");
@@ -76,12 +82,19 @@ const CreatePostModal = ({ isOpen, onClose }: any) => {
         const uploadedImageUrls = await uploadImagesToImgbb(images);
         // You can now submit the data along with image URLs
         const postData = {
+          author:userInfo?._id,
           title: editorTitle, // Use the state value for title
           content: editorContent, // Use the state value for content
           category,
-          imageUrls: uploadedImageUrls, // The URLs of uploaded images
+          images: uploadedImageUrls, // The URLs of uploaded images
         };
-        console.log(postData);
+        const res = await createPost(postData).unwrap();
+        console.log(res);
+        if (res?.success) {
+          toast.success("post added successfully");
+        } else {
+          toast.error("Something went wrong");
+        }
       } catch (error) {
         console.error("Error uploading images:", error);
       }
@@ -120,8 +133,8 @@ const CreatePostModal = ({ isOpen, onClose }: any) => {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Title input field using ReactQuill */}
-          <div className="mb-4">
-            <label className="block mb-1">Title:</label>
+          <div className="mb-4 dark:text-white">
+            <label className="block mb-1 dark:text-white">Title:</label>
             <ReactQuill
               value={editorTitle}
               onChange={setEditorTitle}
@@ -131,7 +144,7 @@ const CreatePostModal = ({ isOpen, onClose }: any) => {
           </div>
 
           {/* Content textarea using ReactQuill */}
-          <div className="mb-4">
+          <div className="mb-4 dark:text-white">
             <label className="block mb-1">Content:</label>
             <ReactQuill
               value={editorContent}
@@ -142,7 +155,7 @@ const CreatePostModal = ({ isOpen, onClose }: any) => {
           </div>
 
           {/* Category dropdown */}
-          <div className="mb-4">
+          <div className="mb-4 dark:text-white">
             <label htmlFor="category" className="block mb-1">
               Category:
             </label>
@@ -202,7 +215,7 @@ const CreatePostModal = ({ isOpen, onClose }: any) => {
           <div>
             <button
               type="submit"
-              className="bg-custom-gradient text-black font-semibold p-2 rounded-md w-full"
+              className="bg-custom-gradient text-black dark:text-white font-semibold p-2 rounded-md w-full"
             >
               Add to your post
             </button>

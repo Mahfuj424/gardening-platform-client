@@ -1,27 +1,28 @@
-import { TResponseSuccess } from "@/types";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { tagTypes } from "../tagTypes";
 import { baseApi } from "./baseApi";
 
-const flatApi = baseApi.injectEndpoints({
+const postsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    createFlat: build.mutation({
+    CreatePost: build.mutation({
       query: (data) => ({
-        url: "/flat",
+        url: "/post/create-post",
         method: "POST",
         data,
       }),
-      invalidatesTags: [tagTypes.flats],
+      invalidatesTags: [tagTypes.posts],
     }),
-    getAllFlats: build.query({
+    getAllPosts: build.query({
       query: (arg: Record<string, any>) => ({
-        url: "/flat",
+        url: "/post/posts",
         method: "GET",
         params: arg,
       }),
       // transformResponse: (response: TResponseSuccess) => {
       //   return response?.data;
       // },
-      providesTags: [tagTypes.flats],
+      providesTags: [tagTypes.posts],
     }),
     getSingleFlat: build.query({
       query: (flatId) => ({
@@ -31,7 +32,7 @@ const flatApi = baseApi.injectEndpoints({
       // transformResponse: (response: TResponseSuccess) => {
       //   return response?.data;
       // },
-      providesTags: [tagTypes.flats],
+      providesTags: [tagTypes.posts],
     }),
     updateFlat: build.mutation({
       query: (data) => ({
@@ -39,30 +40,30 @@ const flatApi = baseApi.injectEndpoints({
         method: "PUT",
         data: data?.body,
       }),
-      invalidatesTags: [tagTypes.flats],
+      invalidatesTags: [tagTypes.posts],
     }),
     deleteFlat: build.mutation({
       query: (id) => ({
         url: `/flat/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: [tagTypes.flats],
+      invalidatesTags: [tagTypes.posts],
     }),
     getMyFlats: build.query({
       query: () => ({
         url: "/flat/my-flats",
         method: "GET",
       }),
-      providesTags: [tagTypes.flats],
+      providesTags: [tagTypes.posts],
     }),
   }),
 });
 
 export const {
-  useCreateFlatMutation,
-  useGetAllFlatsQuery,
+  useCreatePostMutation,
+  useGetAllPostsQuery,
   useGetSingleFlatQuery,
   useUpdateFlatMutation,
   useDeleteFlatMutation,
   useGetMyFlatsQuery,
-} = flatApi;
+} = postsApi;
