@@ -5,14 +5,17 @@ import { baseApi } from "./baseApi";
 
 const postsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    CreatePost: build.mutation({
-      query: (data) => ({
-        url: "/post/create-post",
-        method: "POST",
-        data,
-      }),
+    createPost: build.mutation({
+      query: (data) => {
+        return {
+          url: `/post/create-post`,
+          method: "POST",
+          body: data, // 'body' should be used instead of 'data' for the payload in RTK Query
+        };
+      },
       invalidatesTags: [tagTypes.posts],
     }),
+    
     getAllPosts: build.query({
       query: (arg: Record<string, any>) => ({
         url: "/post/posts",

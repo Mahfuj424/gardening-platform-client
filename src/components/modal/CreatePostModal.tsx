@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -9,14 +9,21 @@ import { useCreatePostMutation } from "@/redux/api/post";
 import { toast } from "sonner";
 import { getUserInfo } from "@/services/authServices";
 
-const CreatePostModal = ({ isOpen, onClose }: any) => {
+const CreatePostModal = ({
+  isOpen,
+  onClose,
+  isEditing = false,
+  defaultTitle = "",
+  defaultContent = "",
+  defaultImages = [], // Accept defaultImages prop
+}: any) => {
   const { register, handleSubmit, reset, watch } = useForm();
   const [imagePreviews, setImagePreviews] = useState<string[]>([]); // Store image previews (local URLs)
-  const [editorTitle, setEditorTitle] = useState(""); // State for title
-  const [editorContent, setEditorContent] = useState(""); // State for content
-  const [createPost]=useCreatePostMutation()
-  const userInfo = getUserInfo()
-  const imgbbApiKey = "2167989ee53b7a504211edcff02ebe5b"
+  const [editorTitle, setEditorTitle] = useState(defaultTitle); // State for title, initialized with defaultTitle
+  const [editorContent, setEditorContent] = useState(defaultContent); // State for content, initialized with defaultContent
+  const [createPost] = useCreatePostMutation();
+  const userInfo = getUserInfo();
+  const imgbbApiKey = "2167989ee53b7a504211edcff02ebe5b";
 
   // Watch for file changes in the input field
   const selectedFiles = watch("images");
@@ -56,6 +63,13 @@ const CreatePostModal = ({ isOpen, onClose }: any) => {
     }
   }, [selectedFiles]);
 
+  // **Update: Load default images when editing a post**
+  useEffect(() => {
+    if (isEditing && defaultImages && defaultImages.length > 0) {
+      setImagePreviews(defaultImages); // Set default images if they exist
+    }
+  }, [isEditing, defaultImages]);
+
   // Upload images to imgbb and return the URLs
   const uploadImagesToImgbb = async (files: File[]) => {
     const promises = Array.from(files).map((file) => {
@@ -80,9 +94,9 @@ const CreatePostModal = ({ isOpen, onClose }: any) => {
     if (images && images.length > 0) {
       try {
         const uploadedImageUrls = await uploadImagesToImgbb(images);
-        // You can now submit the data along with image URLs
         const postData = {
-          author:userInfo?._id,
+          author: userInfo?._id,
+          isPremium: userInfo?.premiumAccess,
           title: editorTitle, // Use the state value for title
           content: editorContent, // Use the state value for content
           category,
@@ -91,12 +105,13 @@ const CreatePostModal = ({ isOpen, onClose }: any) => {
         const res = await createPost(postData).unwrap();
         console.log(res);
         if (res?.success) {
-          toast.success("post added successfully");
+          toast.success("Post added successfully");
         } else {
           toast.error("Something went wrong");
         }
       } catch (error) {
         console.error("Error uploading images:", error);
+        toast.error("Error uploading images"); // Added a toast for image upload errors
       }
     }
 
@@ -115,13 +130,13 @@ const CreatePostModal = ({ isOpen, onClose }: any) => {
   return (
     <div
       id="modal-overlay"
-      className="fixed inset-0  bg-black bg-opacity-50 flex justify-center items-center z-50"
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
       onClick={handleOutsideClick}
     >
       <div className="bg-white dark:bg-darkCard p-6 rounded-md w-full max-w-xl mx-auto relative z-50">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-black dark:text-white">
-            Create Post
+            {isEditing ? "Update Post" : "Create Post"} {/* Dynamically change the title */}
           </h2>
           <button
             onClick={onClose}
@@ -215,9 +230,9 @@ const CreatePostModal = ({ isOpen, onClose }: any) => {
           <div>
             <button
               type="submit"
-              className="bg-custom-gradient text-black dark:text-white font-semibold p-2 rounded-md w-full"
+              className="bg-custom-gradient text-white py-2 px-4 rounded-md"
             >
-              Add to your post
+              {isEditing ? "Update Post" : "Add to Post"}
             </button>
           </div>
         </form>
