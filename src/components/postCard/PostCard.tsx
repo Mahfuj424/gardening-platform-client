@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
-import { useGetAllPostsQuery } from "@/redux/api/post";
+import {
+  useDeletePostMutation,
+  useGetAllPostsQuery,
+  useSavePostMutation,
+} from "@/redux/api/post";
+import { jsPDF } from "jspdf";
 import UserModal from "../modal/UserModal";
-import { BiDislike, BiLike } from "react-icons/bi";
-import { FaRegComment } from "react-icons/fa";
+import { BiDislike, BiLike, BiSolidDislike, BiSolidLike } from "react-icons/bi";
+import { FaFilePdf, FaRegComment } from "react-icons/fa";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { PiShareFatLight } from "react-icons/pi";
 import DOMPurify from "dompurify"; // For sanitization
@@ -14,13 +19,11 @@ import PostComment from "./PostComment";
 import CreatePostModal from "../modal/CreatePostModal"; // Import CreatePostModal
 import { BsBookmarkHeartFill } from "react-icons/bs";
 import { MdEditSquare } from "react-icons/md";
-import {
-  useCreateLikeMutation,
-  
-} from "@/redux/api/likeApi";
+import { useCreateLikeMutation } from "@/redux/api/likeApi";
 import { getUserInfo } from "@/services/authServices";
 import { toast } from "sonner";
 import { useCreateDislikeMutation } from "@/redux/api/dislikeApi";
+import ConfirmationModal from "../modal/ConfirmationModal";
 
 const PostCard = () => {
   const { data, isLoading } = useGetAllPostsQuery({});
@@ -60,7 +63,9 @@ const PostCard = () => {
   };
 
   const [createLikes] = useCreateLikeMutation();
-  const [createDislikes]=useCreateDislikeMutation()
+  const [createDislikes] = useCreateDislikeMutation();
+  const [deletePost] = useDeletePostMutation();
+  const [savePost] = useSavePostMutation();
 
   const handleLikePost = async (postId: string) => {
     if (!userInfo?._id) {
@@ -105,6 +110,58 @@ const PostCard = () => {
     }
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [postIdToDelete, setPostIdToDelete] = useState<string | null>(null);
+  // delete post
+  const handleDeletePost = async (id: string) => {
+    setPostIdToDelete(id);
+    setIsModalOpen(true); // Open the confirmation modal
+  };
+
+  const confirmDeletePost = async () => {
+    if (!postIdToDelete) return;
+
+    try {
+      const res = await deletePost(postIdToDelete).unwrap();
+      console.log(res);
+      toast.success(res?.message);
+    } catch (error: any) {
+      toast.error(error?.message);
+    } finally {
+      setIsModalOpen(false);
+      setPostIdToDelete(null); // Reset the post ID after deletion
+    }
+  };
+
+  const cancelDelete = () => {
+    setIsModalOpen(false);
+    setPostIdToDelete(null); // Reset the post ID on cancel
+  };
+
+  // add favorite post
+  const handleSavePost = async (post: any) => {
+    try {
+      // Create the saveData object with post and user ID
+      const saveData = { post:post?._id, user: userInfo?._id }; 
+      const res = await savePost({ saveData }).unwrap(); // Pass saveData to savePost
+      console.log(res);
+      toast.success(res?.message);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.data?.message);
+    }
+  };
+
+
+  // download pdf
+  const downloadPostAsPDF = (post: any) => {
+    const pdf = new jsPDF();
+
+    // Alternatively, just add text content
+    pdf.text(`Title: ${post.title}`, 10, 10);
+    pdf.text(`Content: ${post.content}`, 10, 20);
+    pdf.save(`${post.title}.pdf`);
+  };
 
   const postData = data?.data;
 
@@ -174,7 +231,7 @@ const PostCard = () => {
                 {modalOpen === item?._id && (
                   <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-darkModal border dark:text-white dark:border-gray-600 rounded-md shadow-lg z-10">
                     <ul>
-                      <li className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkCard cursor-pointer flex items-center gap-1">
+                      <li onClick={()=>handleSavePost(item)} className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkCard cursor-pointer flex items-center gap-1">
                         <BsBookmarkHeartFill /> Save Post
                       </li>
                       <li
@@ -184,10 +241,22 @@ const PostCard = () => {
                         <MdEditSquare />
                         Edit Post
                       </li>
-                      <li className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkCard cursor-pointer flex items-center gap-1">
+                      <li
+                        onClick={() => handleDeletePost(item?._id)}
+                        className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkCard cursor-pointer flex items-center gap-1"
+                      >
                         <RiDeleteBin5Fill /> Delete Post
                       </li>
+                      <li onClick={() => downloadPostAsPDF(item)} className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkCard cursor-pointer flex items-center gap-1">
+                        <FaFilePdf /> Download
+                      </li>
                     </ul>
+                    <ConfirmationModal
+                      isOpen={isModalOpen}
+                      message="Are you sure you want to delete this post?"
+                      onConfirm={confirmDeletePost}
+                      onCancel={cancelDelete}
+                    />
                   </div>
                 )}
               </div>
@@ -250,28 +319,45 @@ const PostCard = () => {
                     : "text-gray-400" // default color
                 }`}
               >
-                <BiLike className={`text-2xl`} />
-                <span>Like</span>
+                {item?.likes?.some(
+                  (like: any) => like?.user?._id === userInfo?._id
+                ) ? (
+                  <BiSolidLike className={`text-2xl`} />
+                ) : (
+                  <BiLike className={`text-2xl`} />
+                )}
+
+                <span className="font-bold">Like</span>
               </div>
 
-              <div onClick={()=> handleDislikePost(item?._id)} className={`flex items-center gap-0.5 cursor-pointer ${
+              <div
+                onClick={() => handleDislikePost(item?._id)}
+                className={`flex items-center gap-0.5 cursor-pointer ${
                   item?.dislikes?.some(
                     (like: { [x: string]: any; _id: any }) =>
                       like?.user?._id === userInfo?._id
                   )
                     ? "text-green-600"
                     : "text-gray-400" // default color
-                }`}>
-                <BiDislike className="text-2xl" />
-                <span>Dislike</span>
+                }`}
+              >
+                {item?.dislikes?.some(
+                  (like: any) => like?.user?._id === userInfo?._id
+                ) ? (
+                  <BiSolidDislike className={`text-2xl`} />
+                ) : (
+                  <BiDislike className="text-2xl" />
+                )}
+
+                <span className="font-bold">Dislike</span>
               </div>
               <div className="flex items-center gap-1 cursor-pointer">
                 <FaRegComment className="text-2xl" />
-                <span>Comment</span>
+                <span className="font-bold">Comment</span>
               </div>
               <div className="flex items-center gap-1 cursor-pointer">
                 <PiShareFatLight className="text-2xl" />
-                <span>Share</span>
+                <span className="font-bold">Share</span>
               </div>
             </div>
 
@@ -295,6 +381,7 @@ const PostCard = () => {
           defaultTitle={currentEditPost?.title}
           defaultContent={currentEditPost?.content}
           defaultImages={currentEditPost?.images}
+          postId={currentEditPost?._id}
         />
       )}
     </div>

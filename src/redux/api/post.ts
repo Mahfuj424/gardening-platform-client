@@ -15,7 +15,19 @@ const postsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.posts],
     }),
-    
+
+    savePost: build.mutation({
+      query: ({ saveData }) => {
+        console.log("Saving post data:", saveData); // Log the saveData here
+        return {
+          url: `/favorite/create-favorite`,
+          method: "POST",
+          body: saveData, // 'body' should be used instead of 'data' for the payload in RTK Query
+        };
+      },
+      invalidatesTags: [tagTypes.posts],
+    }),
+
     getAllPosts: build.query({
       query: (arg: Record<string, any>) => ({
         url: "/post/posts",
@@ -27,34 +39,34 @@ const postsApi = baseApi.injectEndpoints({
       // },
       providesTags: [tagTypes.posts],
     }),
-    getSingleFlat: build.query({
+    getSinglePost: build.query({
       query: (flatId) => ({
-        url: `/flat/${flatId}`,
+        url: `/post/${flatId}`,
         method: "GET",
       }),
-      // transformResponse: (response: TResponseSuccess) => {
-      //   return response?.data;
-      // },
       providesTags: [tagTypes.posts],
     }),
-    updateFlat: build.mutation({
-      query: (data) => ({
-        url: `/flat/${data?.id}`,
-        method: "PUT",
-        data: data?.body,
-      }),
+    updatePost: build.mutation({
+      query: ({ updateData, postId }) => {
+        console.log({ updateData, postId });
+        return {
+          url: `/post/post/${postId}`, // Use the postId in the URL
+          method: "PATCH",
+          body: updateData, // Send the commentObject as the body of the request
+        };
+      },
       invalidatesTags: [tagTypes.posts],
     }),
-    deleteFlat: build.mutation({
+    deletePost: build.mutation({
       query: (id) => ({
-        url: `/flat/${id}`,
+        url: `/post/post/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.posts],
     }),
-    getMyFlats: build.query({
+    getMyPosts: build.query({
       query: () => ({
-        url: "/flat/my-flats",
+        url: "/post/my-posts",
         method: "GET",
       }),
       providesTags: [tagTypes.posts],
@@ -65,8 +77,9 @@ const postsApi = baseApi.injectEndpoints({
 export const {
   useCreatePostMutation,
   useGetAllPostsQuery,
-  useGetSingleFlatQuery,
-  useUpdateFlatMutation,
-  useDeleteFlatMutation,
-  useGetMyFlatsQuery,
+  useGetSinglePostQuery,
+  useDeletePostMutation,
+  useUpdatePostMutation,
+  useGetMyPostsQuery,
+  useSavePostMutation
 } = postsApi;

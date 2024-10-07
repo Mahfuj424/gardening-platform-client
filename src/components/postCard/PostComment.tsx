@@ -10,6 +10,7 @@ import axios from "axios";
 import { TbDots } from "react-icons/tb";
 import {
   useCreateCommentMutation,
+  useDeleteCommentMutation,
   useUpdateCommentMutation,
 } from "@/redux/api/commentApi"; // Import Update Mutation
 import UserModal from "../modal/UserModal";
@@ -33,6 +34,7 @@ const PostComment: React.FC<PostCommentProps> = ({
   const userInfo = getUserInfo();
   const [createComment] = useCreateCommentMutation();
   const [updateComment] = useUpdateCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
   const [commentText, setCommentText] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [commentImage, setCommentImage] = useState<string | null>(null);
@@ -122,6 +124,7 @@ const PostComment: React.FC<PostCommentProps> = ({
     if (!editCommentText && !editCommentImage) return;
 
     const updatedComment = {
+      commentId:editCommentId,
       commentText: editCommentText,
       author: userInfo?._id, // Ensure this comes from a valid user object
       commentImage: editCommentImage,
@@ -130,10 +133,7 @@ const PostComment: React.FC<PostCommentProps> = ({
     console.log("Updated Comment Object:", updatedComment);
 
     try {
-      const res = await updateComment({
-        commentId: editCommentId, // Ensure this is correctly set
-        commentObject: updatedComment,
-      }).unwrap();
+      const res = await updateComment(updatedComment).unwrap();
 
       console.log("Update Response:", res);
 
@@ -150,9 +150,20 @@ const PostComment: React.FC<PostCommentProps> = ({
   };
 
   // Handle Delete
-  const handleDelete = (commentId: string) => {
+  const handleDelete = async (commentId: string) => {
     console.log("Delete clicked for comment ID:", commentId);
     // Implement your delete logic here (e.g., API call)
+    try {
+      const commentInfo = {
+        commentId,
+        authorId: userInfo?._id,
+      };
+      console.log(commentInfo);
+      const res = await deleteComment(commentInfo).unwrap()
+      toast.success(res?.message)
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   return (
@@ -329,12 +340,12 @@ const PostComment: React.FC<PostCommentProps> = ({
               <img
                 src={editCommentImage}
                 alt="Comment Image"
-                className="mt-3"
+                className="mt-3 h-32"
               />
             )}
             <div className="flex items-center justify-end mt-4">
               <button
-                className="px-4 py-2 bg-red-500 text-white rounded-md mr-2"
+                className="px-4 py-2 bg-custom-gradient text-white rounded-md mr-2"
                 onClick={handleUpdateComment}
               >
                 Update

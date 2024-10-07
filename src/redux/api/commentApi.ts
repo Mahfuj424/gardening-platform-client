@@ -1,4 +1,3 @@
-
 import { tagTypes } from "../tagTypes";
 import { baseApi } from "./baseApi";
 
@@ -15,24 +14,28 @@ const commentApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.comments, tagTypes.posts],
     }),
-    
+
     updateComment: build.mutation({
-      query: ({ commentObject, commentId }) => {
-        // Log the commentObject and commentId
-        console.log("Updating comment with ID:", commentId);
-        console.log(commentObject);
-    
+      query: (updateComment) => {
         return {
-          url: `/comments/${commentId}`,
+          url: `/comments/update`,
           method: "PATCH",
-          data: commentObject,
+          body: updateComment,
         };
       },
-      invalidatesTags: [tagTypes.comments],
+      invalidatesTags: [tagTypes.comments, tagTypes.posts],
     }),
-    
+
+    deleteComment: build.mutation({
+      query: (commentInfo) => ({
+        url: `/comments/delete`,
+        method: "DELETE",
+        body: commentInfo,
+      }),
+      invalidatesTags: [tagTypes.comments, tagTypes.posts],
+    }),
   }),
 });
 
-export const { useCreateCommentMutation, useUpdateCommentMutation } =
-commentApi;
+export const { useCreateCommentMutation, useUpdateCommentMutation, useDeleteCommentMutation } =
+  commentApi;

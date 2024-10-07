@@ -5,124 +5,152 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import the styles for Quill editor
-import { useCreatePostMutation } from "@/redux/api/post";
+import { useCreatePostMutation, useUpdatePostMutation } from "@/redux/api/post"; // Import update mutation
 import { toast } from "sonner";
 import { getUserInfo } from "@/services/authServices";
 
 const CreatePostModal = ({
   isOpen,
   onClose,
-  isEditing = false,
   defaultTitle = "",
   defaultContent = "",
-  defaultImages = [], // Accept defaultImages prop
+  defaultImages = [],
+  postId = null,
 }: any) => {
-  const { register, handleSubmit, reset, watch } = useForm();
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]); // Store image previews (local URLs)
-  const [editorTitle, setEditorTitle] = useState(defaultTitle); // State for title, initialized with defaultTitle
-  const [editorContent, setEditorContent] = useState(defaultContent); // State for content, initialized with defaultContent
+  const { register, handleSubmit, reset } = useForm();
+  const [editorTitle, setEditorTitle] = useState(defaultTitle);
+  const [editorContent, setEditorContent] = useState(defaultContent);
+  const [imagePreviews, setImagePreviews] = useState<string[]>(defaultImages); // Store default image URLs
+  const [newImages, setNewImages] = useState<File[]>([]); // Store newly added images as File objects
   const [createPost] = useCreatePostMutation();
+  const [updatePost] = useUpdatePostMutation(); // New hook for updating posts
   const userInfo = getUserInfo();
   const imgbbApiKey = "2167989ee53b7a504211edcff02ebe5b";
 
-  // Watch for file changes in the input field
-  const selectedFiles = watch("images");
-
-  // Close the modal if clicked outside
   const handleOutsideClick = (e: any) => {
     if (e.target.id === "modal-overlay") {
       onClose();
     }
   };
 
-  // Disable background scroll when modal is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden"; // Disable scroll
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto"; // Enable scroll
+      document.body.style.overflow = "auto";
     }
-
     return () => {
-      document.body.style.overflow = "auto"; // Cleanup scroll behavior on close
+      document.body.style.overflow = "auto";
     };
   }, [isOpen]);
 
-  // Preview selected images
-  useEffect(() => {
-    if (selectedFiles && selectedFiles.length > 0) {
-      const previews = Array.from(selectedFiles).map((file: any) =>
-        URL.createObjectURL(file)
+  const handleImageSelection = (e: any) => {
+    const files = Array.from(e.target.files) as File[];
+    setNewImages((prev) => [...prev, ...files]);
+
+    const newImagePreviews = files.map((file) => URL.createObjectURL(file));
+    setImagePreviews((prev) => [...prev, ...newImagePreviews]);
+  };
+
+  const handleRemoveImage = (index: number, isDefault: boolean) => {
+    if (isDefault) {
+      setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+    } else {
+      setNewImages((prev) =>
+        prev.filter((_, i) => i !== index - defaultImages.length)
       );
-      setImagePreviews(previews);
-
-      // Clean up object URLs after the component unmounts to prevent memory leaks
-      return () => {
-        previews.forEach((url) => URL.revokeObjectURL(url));
-      };
+      setImagePreviews((prev) => prev.filter((_, i) => i !== index));
     }
-  }, [selectedFiles]);
+  };
 
-  // **Update: Load default images when editing a post**
-  useEffect(() => {
-    if (isEditing && defaultImages && defaultImages.length > 0) {
-      setImagePreviews(defaultImages); // Set default images if they exist
-    }
-  }, [isEditing, defaultImages]);
-
-  // Upload images to imgbb and return the URLs
   const uploadImagesToImgbb = async (files: File[]) => {
-    const promises = Array.from(files).map((file) => {
+    const promises = files.map((file) => {
       const formData = new FormData();
       formData.append("image", file);
-
       return axios
         .post(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, formData)
         .then((response) => response.data.data.url)
         .catch((error) => console.error("Error uploading image:", error));
     });
-
     const urls = await Promise.all(promises);
     return urls;
   };
 
-  // Handle form submission
-  const onSubmit = async (data: any) => {
-    const { category, images } = data;
+  // Separate function for creating a post
+  const handleCreatePost = async (data: any) => {
+    const { category } = data;
 
-    // Upload selected images
-    if (images && images.length > 0) {
+    let uploadedImageUrls: string[] = [];
+    if (newImages.length > 0) {
       try {
-        const uploadedImageUrls = await uploadImagesToImgbb(images);
-        const postData = {
-          author: userInfo?._id,
-          isPremium: userInfo?.premiumAccess,
-          title: editorTitle, // Use the state value for title
-          content: editorContent, // Use the state value for content
-          category,
-          images: uploadedImageUrls, // The URLs of uploaded images
-        };
-        const res = await createPost(postData).unwrap();
-        console.log(res);
-        if (res?.success) {
-          toast.success("Post added successfully");
-        } else {
-          toast.error("Something went wrong");
-        }
+        uploadedImageUrls = await uploadImagesToImgbb(newImages);
       } catch (error) {
         console.error("Error uploading images:", error);
-        toast.error("Error uploading images"); // Added a toast for image upload errors
+        toast.error("Error uploading images");
       }
     }
 
-    // Reset the form after submission
+    const postData = {
+      author: userInfo?._id,
+      isPremium: userInfo?.premiumAccess,
+      title: editorTitle,
+      content: editorContent,
+      category,
+      images: [
+        ...imagePreviews.slice(0, defaultImages.length),
+        ...uploadedImageUrls,
+      ],
+    };
+
+    const res = await createPost(postData).unwrap();
+    if (res?.success) {
+      toast.success("Post added successfully");
+    } else {
+      toast.error("Something went wrong");
+    }
+
     reset();
-    onClose(); // Close modal after submission
+    onClose();
   };
 
-  // Remove image from preview
-  const removeImage = (index: number) => {
-    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  // Separate function for updating a post
+  const handleUpdatePost = async (data: any) => {
+    console.log(data);
+    const { category } = data;
+
+    let uploadedImageUrls: string[] = [];
+    if (newImages.length > 0) {
+      try {
+        uploadedImageUrls = await uploadImagesToImgbb(newImages);
+      } catch (error) {
+        console.error("Error uploading images:", error);
+        toast.error("Error uploading images");
+      }
+    }
+
+    const updateData = {
+      author: userInfo?._id,
+      isPremium: userInfo?.premiumAccess,
+      title: editorTitle,
+      content: editorContent,
+      category,
+      images: [
+        ...imagePreviews.slice(0, defaultImages.length),
+        ...uploadedImageUrls,
+      ],
+    };
+    console.log(updateData);
+
+    const res = await updatePost({updateData, postId }).unwrap(); // Call the update mutation
+    console.log(res);
+    if (res?.success) {
+      toast.success(res?.message);
+    } else {
+      toast.error("Something went wrong");
+    }
+
+    reset();
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -136,7 +164,7 @@ const CreatePostModal = ({
       <div className="bg-white dark:bg-darkCard p-6 rounded-md w-full max-w-xl mx-auto relative z-50">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-black dark:text-white">
-            {isEditing ? "Update Post" : "Create Post"} {/* Dynamically change the title */}
+            {defaultTitle !== '' && defaultContent !== '' ? "Update Post" : "Create Post"}
           </h2>
           <button
             onClick={onClose}
@@ -145,9 +173,13 @@ const CreatePostModal = ({
             &#10005;
           </button>
         </div>
-
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Title input field using ReactQuill */}
+  
+        <form
+          onSubmit={handleSubmit(
+            defaultTitle !== '' && defaultContent !== '' ? handleUpdatePost : handleCreatePost
+          )}
+        >
+          {/* Title input */}
           <div className="mb-4 dark:text-white">
             <label className="block mb-1 dark:text-white">Title:</label>
             <ReactQuill
@@ -157,8 +189,8 @@ const CreatePostModal = ({
               className="dark:bg-darkBg dark:text-white"
             />
           </div>
-
-          {/* Content textarea using ReactQuill */}
+  
+          {/* Content input */}
           <div className="mb-4 dark:text-white">
             <label className="block mb-1">Content:</label>
             <ReactQuill
@@ -168,8 +200,8 @@ const CreatePostModal = ({
               className="dark:bg-darkBg dark:text-white"
             />
           </div>
-
-          {/* Category dropdown */}
+  
+          {/* Category selection */}
           <div className="mb-4 dark:text-white">
             <label htmlFor="category" className="block mb-1">
               Category:
@@ -187,15 +219,16 @@ const CreatePostModal = ({
               <option value="Herb Gardens">Herb Gardens</option>
             </select>
           </div>
-
-          {/* Multiple Image Upload */}
-          <div className="border border-dashed border-black dark:border-gray-300 text-center mb-2 flex flex-wrap items-center justify-center relative w-full min-h-[208px]">
+  
+          {/* Image upload section */}
+          <div className="border border-dashed border-black dark:border-gray-300 text-center mb-2 flex flex-wrap items-center justify-center relative w-full min-h-[150px] px-4">
             <input
               type="file"
               multiple
               accept="image/*"
               {...register("images")}
               className="absolute opacity-0 w-full h-full cursor-pointer"
+              onChange={handleImageSelection}
             />
             {!imagePreviews.length ? (
               <p className="text-gray-300">
@@ -203,7 +236,7 @@ const CreatePostModal = ({
               </p>
             ) : (
               <div className="flex flex-wrap gap-2 justify-start w-full">
-                {imagePreviews.map((url, index) => (
+                {imagePreviews?.map((url: string, index: number) => (
                   <div
                     key={index}
                     className="relative w-20 h-20 md:w-24 md:h-24"
@@ -215,30 +248,31 @@ const CreatePostModal = ({
                     />
                     <button
                       type="button"
-                      onClick={() => removeImage(index)}
-                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                      onClick={() =>
+                        handleRemoveImage(index, index < defaultImages.length)
+                      }
+                      className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
                     >
-                      &#10005;
+                      &times;
                     </button>
                   </div>
                 ))}
               </div>
             )}
           </div>
-
-          {/* Add to post button */}
-          <div>
-            <button
-              type="submit"
-              className="bg-custom-gradient text-white py-2 px-4 rounded-md"
-            >
-              {isEditing ? "Update Post" : "Add to Post"}
-            </button>
-          </div>
+  
+          {/* Submit button */}
+          <button
+            type="submit"
+            className="bg-custom-gradient w-full text-white px-4 py-2 rounded-md mt-4"
+          >
+            {defaultTitle !== '' && defaultContent !== '' ? "Update Post" : "Create Post"}
+          </button>
         </form>
       </div>
     </div>
   );
+  
 };
 
 export default CreatePostModal;

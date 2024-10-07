@@ -10,10 +10,5 @@ export const loginUser = async (values: FieldValues) => {
     credentials: "include",
   });
   const userInfo = await res.json();
-  // if (userInfo?.data?.token) {
-  //   setAccessTokenToCookies(userInfo?.data?.token, {
-  //     redirect: "/",
-  //   });
-  // }
   return userInfo;
 };
