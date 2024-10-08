@@ -5,20 +5,20 @@ export const userApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getAllUser: build.query({
       query: () => ({
-        url: "/user",
+        url: "/user/all-users",
         method: "GET",
       }),
       providesTags: [tagTypes.users],
     }),
-    changeStatus: build.mutation({
-      query: (data) => {
+    followUser: build.mutation({
+      query: ({followInfo}) => {
         return {
-          url: `/user/change-status/${data?.userId}`,
-          method: "PATCH",
-          data: data?.body,
+          url: `/user/follow`,
+          method: "POST",
+          body: followInfo,
         };
       },
-      invalidatesTags: [tagTypes.users],
+      invalidatesTags: [tagTypes.users, tagTypes.posts],
     }),
     changeUserRole: build.mutation({
       query: (data) => {
@@ -58,7 +58,7 @@ export const userApi = baseApi.injectEndpoints({
 
 export const {
   useGetAllUserQuery,
-  useChangeStatusMutation,
+  useFollowUserMutation,
   useChangeUserRoleMutation,
   useGetMyProfileQuery,
   useChangePasswordMutation,

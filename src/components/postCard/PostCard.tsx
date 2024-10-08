@@ -24,6 +24,7 @@ import { getUserInfo } from "@/services/authServices";
 import { toast } from "sonner";
 import { useCreateDislikeMutation } from "@/redux/api/dislikeApi";
 import ConfirmationModal from "../modal/ConfirmationModal";
+import { useFollowUserMutation } from "@/redux/api/userApi";
 
 const PostCard = () => {
   const { data, isLoading } = useGetAllPostsQuery({});
@@ -66,6 +67,7 @@ const PostCard = () => {
   const [createDislikes] = useCreateDislikeMutation();
   const [deletePost] = useDeletePostMutation();
   const [savePost] = useSavePostMutation();
+  const [followUser] = useFollowUserMutation();
 
   const handleLikePost = async (postId: string) => {
     if (!userInfo?._id) {
@@ -142,7 +144,7 @@ const PostCard = () => {
   const handleSavePost = async (post: any) => {
     try {
       // Create the saveData object with post and user ID
-      const saveData = { post:post?._id, user: userInfo?._id }; 
+      const saveData = { post: post?._id, user: userInfo?._id };
       const res = await savePost({ saveData }).unwrap(); // Pass saveData to savePost
       console.log(res);
       toast.success(res?.message);
@@ -152,7 +154,6 @@ const PostCard = () => {
     }
   };
 
-
   // download pdf
   const downloadPostAsPDF = (post: any) => {
     const pdf = new jsPDF();
@@ -161,6 +162,18 @@ const PostCard = () => {
     pdf.text(`Title: ${post.title}`, 10, 10);
     pdf.text(`Content: ${post.content}`, 10, 20);
     pdf.save(`${post.title}.pdf`);
+  };
+
+  // follow user
+  const handleFollowUser = async (followeeId: string) => {
+    try {
+      const followInfo = { followerId: userInfo?._id, followeeId };
+      const res = await followUser({ followInfo }).unwrap();
+      console.log(res);
+      toast.success(res?.message);
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   const postData = data?.data;
@@ -203,9 +216,20 @@ const PostCard = () => {
                     {item?.author?.isVerified && (
                       <RiVerifiedBadgeFill className="text-blue-500" />
                     )}
-                    <span className="text-blue-500 ms-2 cursor-pointer">
-                      Follow
-                    </span>
+                    <div>
+                      {item?.author?._id !== userInfo?._id && (
+                        <div
+                          onClick={() => handleFollowUser(item?.author?._id)}
+                          className="text-blue-500 ms-2 cursor-pointer"
+                        >
+                          {item?.author?.followers?.some(
+                            (follower: any) => follower === userInfo?._id
+                          )
+                            ? "Following"
+                            : "Follow"}
+                        </div>
+                      )}
+                    </div>
                   </p>
                   <p className="text-xs text-gray-400">2 hours ago</p>
                 </div>
@@ -218,7 +242,7 @@ const PostCard = () => {
                     onMouseEnter={() => setHoveredPost(item?._id)}
                     onMouseLeave={handleMouseLeave}
                   >
-                    <UserModal user={item?.author} />
+                    <UserModal user={item?.author} currentUser={userInfo?._id} />
                   </div>
                 )}
               </div>
@@ -231,23 +255,33 @@ const PostCard = () => {
                 {modalOpen === item?._id && (
                   <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-darkModal border dark:text-white dark:border-gray-600 rounded-md shadow-lg z-10">
                     <ul>
-                      <li onClick={()=>handleSavePost(item)} className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkCard cursor-pointer flex items-center gap-1">
+                      <li
+                        onClick={() => handleSavePost(item)}
+                        className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkCard cursor-pointer flex items-center gap-1"
+                      >
                         <BsBookmarkHeartFill /> Save Post
                       </li>
+                      {item?.author?._id === userInfo?._id && (
+                        <>
+                          <li
+                            className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkCard cursor-pointer flex items-center gap-1"
+                            onClick={() => handleEditPost(item)} // Open edit modal with current post data
+                          >
+                            <MdEditSquare />
+                            Edit Post
+                          </li>
+                          <li
+                            onClick={() => handleDeletePost(item?._id)}
+                            className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkCard cursor-pointer flex items-center gap-1"
+                          >
+                            <RiDeleteBin5Fill /> Delete Post
+                          </li>
+                        </>
+                      )}
                       <li
-                        className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkCard cursor-pointer flex items-center gap-1"
-                        onClick={() => handleEditPost(item)} // Open edit modal with current post data
-                      >
-                        <MdEditSquare />
-                        Edit Post
-                      </li>
-                      <li
-                        onClick={() => handleDeletePost(item?._id)}
+                        onClick={() => downloadPostAsPDF(item)}
                         className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkCard cursor-pointer flex items-center gap-1"
                       >
-                        <RiDeleteBin5Fill /> Delete Post
-                      </li>
-                      <li onClick={() => downloadPostAsPDF(item)} className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkCard cursor-pointer flex items-center gap-1">
                         <FaFilePdf /> Download
                       </li>
                     </ul>

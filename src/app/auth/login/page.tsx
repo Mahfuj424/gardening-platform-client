@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
-import { loginUser } from '@/services/actions/loginUser';
-import setAccessTokenToCookies from '@/services/actions/setAccessTokenToCookie';
-import { storeUserInfo } from '@/services/authServices';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { FaEye, FaEyeSlash, FaGoogle, FaFacebookF } from 'react-icons/fa';
-import { toast } from 'sonner';
+"use client";
+import { loginUser } from "@/services/actions/loginUser";
+import setAccessTokenToCookies from "@/services/actions/setAccessTokenToCookie";
+import { storeUserInfo } from "@/services/authServices";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { FaEye, FaEyeSlash, FaGoogle, FaFacebookF } from "react-icons/fa";
+import { toast } from "sonner";
 
 interface FormData {
   email: string;
@@ -27,8 +27,6 @@ const LoginPage = () => {
     setShowPassword(!showPassword);
   };
 
-
-
   // Handle form submission
   const onSubmit = async (data: FormData) => {
     try {
@@ -45,7 +43,7 @@ const LoginPage = () => {
       } else {
         toast(res?.message);
       }
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.message);
     }
   };
@@ -66,14 +64,12 @@ const LoginPage = () => {
           />
         </div>
 
-
-        <h1 className="text-2xl bg-custom-gradient font-bold bg-clip-text text-transparent text-center">Please Login</h1>
+        <h1 className="text-2xl bg-custom-gradient font-bold bg-clip-text text-transparent text-center">
+          Please Login
+        </h1>
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
-
-
           {/* Email Input */}
           <div>
             <label
@@ -85,7 +81,7 @@ const LoginPage = () => {
             <input
               id="email"
               type="email"
-              {...register('email', { required: true })}
+              {...register("email", { required: true })}
               className="w-full mt-2 p-3 bg-transparent border border-gray-500 rounded-md text-white placeholder-gray-400 focus:border-custom-green focus:ring-custom-green"
               placeholder="Enter Your Email"
             />
@@ -104,8 +100,8 @@ const LoginPage = () => {
             </label>
             <input
               id="password"
-              type={showPassword ? 'text' : 'password'}
-              {...register('password', { required: true })}
+              type={showPassword ? "text" : "password"}
+              {...register("password", { required: true })}
               className="w-full mt-2 p-3 bg-transparent border border-gray-500 rounded-md text-white placeholder-gray-400 focus:border-custom-green focus:ring-custom-green"
               placeholder="Enter Your Password"
             />
@@ -123,11 +119,11 @@ const LoginPage = () => {
 
           {/* Sign Up Button */}
           <button
-  type="submit"
-  className="w-full py-3 bg-custom-gradient text-white font-semibold rounded-md hover:bg-opacity-90 transition"
->
-  Login
-</button>
+            type="submit"
+            className="w-full py-3 bg-custom-gradient text-white font-semibold rounded-md hover:bg-opacity-90 transition"
+          >
+            Login
+          </button>
 
           {/* Social Login */}
           <div className="flex justify-center space-x-4 mt-4">
@@ -147,7 +143,7 @@ const LoginPage = () => {
 
           {/* Signup Link */}
           <p className="text-center text-white mt-4">
-            Already have an account?{' '}
+            Are you new here?{" "}
             <a
               href="/auth/register"
               className="bg-custom-gradient font-bold bg-clip-text text-transparent hover:underline"

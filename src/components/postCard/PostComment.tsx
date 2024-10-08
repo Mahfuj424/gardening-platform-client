@@ -204,13 +204,13 @@ const PostComment: React.FC<PostCommentProps> = ({
                         {hoveredComment === comment?.author?._id && (
                           <div
                             className="absolute z-50"
-                            style={{ top: "100%", left: "0" }}
+                            style={{ top: "40%", left: "0" }}
                             onMouseEnter={() =>
                               setHoveredComment(comment?.author?._id)
                             }
                             onMouseLeave={handleMouseLeaveComment}
                           >
-                            <UserModal user={comment?.author} />
+                            <UserModal user={comment?.author} currentUser={userInfo?._id} />
                           </div>
                         )}
 

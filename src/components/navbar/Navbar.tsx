@@ -8,6 +8,7 @@ import { BsMoonStarsFill } from "react-icons/bs";
 import { IoSearch } from "react-icons/io5";
 import { logoutUser } from "@/services/actions/logoutUser";
 import { getUserInfo } from "@/services/authServices";
+import { LuLogOut } from "react-icons/lu";
 
 export default function NavBar({
   darkMode,
@@ -22,7 +23,7 @@ export default function NavBar({
   const userInfo = getUserInfo();
   const handleLogout=()=>{
     logoutUser(router)
-    router.push('/auth/login')
+    router.push('/auth/register')
   }
 
   return (
@@ -158,8 +159,8 @@ export default function NavBar({
                       )}
                     </button>
                   </li>
-                  <li onClick={handleLogout} className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer">
-                    LogOut
+                  <li onClick={handleLogout} className="px-4 py-2 text-sm flex items-center gap-1 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer">
+                  <LuLogOut /> LogOut
                   </li>
                 </ul>
               </div>
