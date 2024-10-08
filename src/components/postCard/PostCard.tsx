@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
+import { formatDistanceToNowStrict } from "date-fns";
 import {
   useDeletePostMutation,
   useGetAllPostsQuery,
@@ -35,6 +36,14 @@ const PostCard = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false); // For Edit Modal
   const [currentEditPost, setCurrentEditPost] = useState<any>(null); // Store post data to edit
   const userInfo = getUserInfo();
+
+  // time format
+  const formatPostDate = (timestamp: string) => {
+    const date = new Date(timestamp);
+    return formatDistanceToNowStrict(date, { addSuffix: true })
+      .replace("about ", "") // Removes "about" for a more concise format
+      .replace(" ago", ""); // Removes "ago" for a clean Facebook-like appearance
+  };
 
   const handleMouseEnter = (postId: string) => {
     setHoveredPost(postId);
@@ -231,7 +240,9 @@ const PostCard = () => {
                       )}
                     </div>
                   </p>
-                  <p className="text-xs text-gray-400">2 hours ago</p>
+                  <p className="text-xs text-gray-400">
+                    {formatPostDate(item?.createdAt)} ago
+                  </p>
                 </div>
 
                 {/* Show User Modal for the specific post */}
@@ -242,7 +253,10 @@ const PostCard = () => {
                     onMouseEnter={() => setHoveredPost(item?._id)}
                     onMouseLeave={handleMouseLeave}
                   >
-                    <UserModal user={item?.author} currentUser={userInfo?._id} />
+                    <UserModal
+                      user={item?.author}
+                      currentUser={userInfo?._id}
+                    />
                   </div>
                 )}
               </div>

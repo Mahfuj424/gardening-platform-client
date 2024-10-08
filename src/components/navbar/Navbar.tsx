@@ -48,7 +48,7 @@ export default function NavBar({
           </div>
           <input
             type="text"
-            placeholder="Search Friends"
+            placeholder="Search Garden Content"
             className="pl-10 w-full px-4 py-2 rounded-md border dark:text-white dark:border-none bg-gray-100 border-gray-300 dark:bg-darkModal outline-none dark:focus:ring-0 focus:ring-2 focus:ring-[#00984b]"
           />
         </div>

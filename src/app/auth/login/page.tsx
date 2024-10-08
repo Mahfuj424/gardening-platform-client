@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import { useState } from "react";
+import { FaEye, FaEyeSlash, FaGoogle, FaFacebookF } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { loginUser } from "@/services/actions/loginUser";
 import setAccessTokenToCookies from "@/services/actions/setAccessTokenToCookie";
 import { storeUserInfo } from "@/services/authServices";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { FaEye, FaEyeSlash, FaGoogle, FaFacebookF } from "react-icons/fa";
-import { toast } from "sonner";
+import { useForgotPassowrdMutation } from "@/redux/api/userApi";
 
 interface FormData {
   email: string;
@@ -17,6 +18,8 @@ interface FormData {
 const LoginPage = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [modalEmail, setModalEmail] = useState(''); // State to capture email in modal
   const {
     register,
     handleSubmit,
@@ -25,6 +28,10 @@ const LoginPage = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   // Handle form submission
@@ -38,7 +45,6 @@ const LoginPage = () => {
           redirect: "/",
         });
         toast.success("User login successfully");
-
         router.push("/");
       } else {
         toast(res?.message);
@@ -46,6 +52,21 @@ const LoginPage = () => {
     } catch (error: any) {
       toast.error(error.message);
     }
+  };
+ 
+  // Handle forgot password submission
+  const [forgotPassowrd] = useForgotPassowrdMutation();
+
+  const handleForgotPassword = async () => {
+    if (!modalEmail) {
+      toast.error("Please enter a valid email.");
+      return;
+    }
+    
+    const res = await forgotPassowrd({ email: modalEmail }).unwrap();
+    console.log(res);
+    toast.success("Password reset link sent to your email.!!  reset password into 10 min");
+    toggleModal(); // Close modal after submitting
   };
 
   return (
@@ -117,7 +138,15 @@ const LoginPage = () => {
             </button>
           </div>
 
-          {/* Sign Up Button */}
+          {/* Forgot Password Link */}
+          <p
+            className="bg-custom-gradient font-bold text-end bg-clip-text text-transparent cursor-pointer hover:underline"
+            onClick={toggleModal}
+          >
+            Forgot Password
+          </p>
+
+          {/* Login Button */}
           <button
             type="submit"
             className="w-full py-3 bg-custom-gradient text-white font-semibold rounded-md hover:bg-opacity-90 transition"
@@ -153,6 +182,38 @@ const LoginPage = () => {
           </p>
         </form>
       </div>
+
+      {/* Modal for Forgot Password */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">
+              Forgot Password
+            </h2>
+            <input
+              type="email"
+              placeholder="Please enter your valid email"
+              value={modalEmail}
+              onChange={(e) => setModalEmail(e.target.value)} // Set modal email state
+              className="w-full p-3 border outline-none border-green-500 focus:ring-2 focus:ring-[#00984b] rounded-md"
+            />
+            <div className="flex flex-row-reverse gap-10 mt-5 ">
+              <button
+                onClick={handleForgotPassword} // Correctly handle email submission
+                className="w-full py-3 bg-custom-gradient text-white font-semibold rounded-md hover:bg-red-600 transition"
+              >
+                Submit
+              </button>
+              <button
+                onClick={toggleModal}
+                className="w-full py-2 bg-gray-300 text-gray-800 font-semibold rounded-md hover:bg-gray-400 transition"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

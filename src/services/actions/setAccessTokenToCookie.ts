@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 import { authKey } from "@/constants/auth";
 import { cookies } from "next/headers";

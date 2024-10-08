@@ -20,12 +20,12 @@ export const userApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.users, tagTypes.posts],
     }),
-    changeUserRole: build.mutation({
+    forgotPassowrd: build.mutation({
       query: (data) => {
         return {
-          url: `/user/change-role/${data?.userId}`,
-          method: "PATCH",
-          data: data?.body,
+          url: `/auth/forgot-password`,
+          method: "POST",
+          body: data,
         };
       },
       invalidatesTags: [tagTypes.users],
@@ -59,7 +59,7 @@ export const userApi = baseApi.injectEndpoints({
 export const {
   useGetAllUserQuery,
   useFollowUserMutation,
-  useChangeUserRoleMutation,
+  useForgotPassowrdMutation,
   useGetMyProfileQuery,
   useChangePasswordMutation,
   useUpdateProfileMutation,
