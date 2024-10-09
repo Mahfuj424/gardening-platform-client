@@ -30,29 +30,32 @@ export const userApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.users],
     }),
-    getMyProfile: build.query({
-      query: () => ({
-        url: "/user/profile",
-        method: "GET",
-      }),
-      providesTags: [tagTypes.users, tagTypes.profile],
+    getSingleProfile: build.query({
+      query: (id) => {
+        console.log("Fetched user ID:", id); // Logs the ID before sending the request
+        return {
+          url: `/user/${id}`,
+          method: "GET",
+        };
+      },
+      providesTags: [tagTypes.users, tagTypes.posts, tagTypes.likes, tagTypes.dislikes, tagTypes.comments],
     }),
-    changePassword: build.mutation({
-      query: (data) => ({
-        url: "/user/change-password",
-        method: "POST",
-        data,
-      }),
+    
+    updateProfile: build.mutation({
+      query: ({ data, id }) => {
+        // Console log the data and id
+        console.log("ID:", id);
+        console.log("Data:", data);
+    
+        return {
+          url: `/user/user/${id}`,
+          method: "PATCH",
+          body: data,
+        };
+      },
       invalidatesTags: [tagTypes.users],
     }),
-    updateProfile: build.mutation({
-      query: (data) => ({
-        url: "/user/update-profile",
-        method: "PATCH",
-        data,
-      }),
-      invalidatesTags: [tagTypes.users, tagTypes.profile],
-    }),
+    
   }),
 });
 
@@ -60,7 +63,6 @@ export const {
   useGetAllUserQuery,
   useFollowUserMutation,
   useForgotPassowrdMutation,
-  useGetMyProfileQuery,
-  useChangePasswordMutation,
+  useGetSingleProfileQuery,
   useUpdateProfileMutation,
 } = userApi;

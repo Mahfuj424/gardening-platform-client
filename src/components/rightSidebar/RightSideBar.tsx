@@ -3,6 +3,7 @@
 "use client";
 import { useFollowUserMutation, useGetAllUserQuery } from "@/redux/api/userApi";
 import { getUserInfo } from "@/services/authServices";
+import Link from "next/link";
 import { toast } from "sonner";
 
 const RightSidebar = () => {
@@ -10,7 +11,7 @@ const RightSidebar = () => {
   const people = data?.data; // Access user data from the API response
   const userInfo = getUserInfo();
   
-  const [followUser, { isLoading }] = useFollowUserMutation(); // Destructuring to include isLoading
+  const [followUser] = useFollowUserMutation(); // Destructuring to include isLoading
 
   const handleFollowUser = async (followeeId: string) => {
     try {
@@ -46,9 +47,9 @@ const RightSidebar = () => {
                   className="w-10 h-10 rounded-full"
                 />
                 <div>
-                  <p className="dark:text-white text-secondary">
+                  <Link href={`/user/${person?._id}`} className="dark:text-white hover:underline cursor-pointer text-secondary">
                     {person.name}
-                  </p>
+                  </Link>
                   <p className="text-xs text-gray-400">
                     {person.followers?.length} Followers
                   </p>{" "}
@@ -69,9 +70,9 @@ const RightSidebar = () => {
                   ) : (
                     <button
                       className="bg-custom-gradient px-4 py-2 rounded-md text-white font-semibold"
-                      disabled={isLoading}
+                      
                     >
-                      {isLoading ? "Following..." : "Follow"}
+                      Follow
                     </button>
                   )}
                 </div>

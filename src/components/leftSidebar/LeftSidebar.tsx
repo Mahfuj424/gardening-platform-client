@@ -37,9 +37,9 @@ export default function LeftSidebar() {
       route: "pages",
     },
     {
-      title: "Group",
+      title: "About Us",
       imageUrl: "https://i.ibb.co/XCQhKGQ/group.png",
-      route: "group",
+      route: "about",
     },
     {
       title: "Market",
@@ -60,7 +60,7 @@ export default function LeftSidebar() {
 
   return (
     <div>
-      <Link href={'/profile'} className="flex items-center gap-3 mb-5">
+      <Link href={`/user/${userInfo?._id}`} className="flex items-center gap-3 mb-5">
           <img
             className="w-10 h-10 rounded-full ms-2"
             src={userInfo?.profileImage}

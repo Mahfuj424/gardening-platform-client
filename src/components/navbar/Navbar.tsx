@@ -1,67 +1,89 @@
-
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { BiSolidMessageDetail } from "react-icons/bi";
-import { MdNotificationsActive } from "react-icons/md";
+import { MdOutlineNotificationsActive } from "react-icons/md";
 import { TiWeatherSunny } from "react-icons/ti";
 import { BsMoonStarsFill } from "react-icons/bs";
-import { IoSearch } from "react-icons/io5";
 import { logoutUser } from "@/services/actions/logoutUser";
 import { getUserInfo } from "@/services/authServices";
 import { LuLogOut } from "react-icons/lu";
+import { RiMessengerLine } from "react-icons/ri";
 
-export default function NavBar({
-  darkMode,
-  toggleDarkMode,
-}: {
+interface NavBarProps {
   darkMode: boolean;
   toggleDarkMode: () => void;
-}) {
+}
+
+interface UserInfo {
+  profileImage?: string;
+  name?: string;
+  email?: string;
+}
+
+const NavBar: React.FC<NavBarProps> = ({  toggleDarkMode }) => {
   const router = useRouter();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null); // Ref for the dropdown menu
-  const userInfo = getUserInfo();
-  const handleLogout=()=>{
-    logoutUser(router)
-    router.push('/auth/register')
-  }
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const filterDropdownRef = useRef<HTMLDivElement>(null);
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const info = await getUserInfo();
+      setUserInfo(info);
+    };
+
+    fetchUserInfo();
+  }, []);
+
+  const handleLogout = () => {
+    logoutUser(router);
+    router.push('/auth/register');
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        filterDropdownRef.current && 
+        !filterDropdownRef.current.contains(event.target as Node) && 
+        !profileDropdownRef.current?.contains(event.target as Node)
+      ) {
+        setFilterDropdownOpen(false);
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [filterDropdownRef, profileDropdownRef]);
+
+
+
+
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white dark:bg-darkCard shadow-md z-50">
       <div className="flex items-center justify-between px-6 py-4">
-        {/* Logo */}
         <div className="cursor-pointer flex" onClick={() => router.push("/")}>
           <img
-            src="https://i.ibb.co.com/M5VKXRn/garden-Logo-removebg-preview.png"
+            src="https://i.ibb.co/M5VKXRn/garden-Logo-removebg-preview.png"
             alt="GrowNest Logo"
             className="w-20 h-10 rounded-full"
           />
-          <h1 className="text-3xl  font-semibold bg-custom-gradient bg-clip-text text-transparent">
+          <h1 className="text-3xl font-semibold bg-custom-gradient bg-clip-text text-transparent">
             GrowNest
           </h1>
         </div>
 
-        {/* Search Bar */}
-        <div className="relative w-[45%] -ms-36">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3">
-            <IoSearch className="text-gray-500 dark:text-gray-300" />
-          </div>
-          <input
-            type="text"
-            placeholder="Search Garden Content"
-            className="pl-10 w-full px-4 py-2 rounded-md border dark:text-white dark:border-none bg-gray-100 border-gray-300 dark:bg-darkModal outline-none dark:focus:ring-0 focus:ring-2 focus:ring-[#00984b]"
-          />
-        </div>
+        
 
-        {/* Icons */}
         <div className="flex gap-5 items-center relative">
-          {/* Notification Icon */}
           <div className="relative group">
-            <div className="bg-gray-200 dark:bg-secondary dark:text-white rounded-full p-1.5">
-              <MdNotificationsActive
+            <div className="bg-gray-200 dark:bg-secondary text-green-500 rounded-full p-1.5">
+              <MdOutlineNotificationsActive
                 size={28}
                 className="cursor-pointer"
-                onClick={() => router.push("/notifications")}
               />
             </div>
             <div className="absolute left-1/2 -translate-x-1/2 bottom-10 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -71,10 +93,9 @@ export default function NavBar({
             </div>
           </div>
 
-          {/* Message Icon */}
           <div className="relative group">
-            <div className="bg-gray-200  dark:bg-secondary dark:text-white rounded-full p-1.5">
-              <BiSolidMessageDetail
+            <div className="bg-gray-200 dark:bg-secondary text-green-500 rounded-full p-1.5">
+              <RiMessengerLine
                 size={28}
                 className="cursor-pointer"
                 onClick={() => router.push("/messages")}
@@ -87,87 +108,66 @@ export default function NavBar({
             </div>
           </div>
 
-          {/* Profile Image with Dropdown */}
-          <div className="relative" ref={dropdownRef}>
+          <div className="relative" ref={profileDropdownRef}>
             <img
               src={userInfo?.profileImage}
               alt={"profile"}
               className="w-10 h-10 rounded-full cursor-pointer"
-              onClick={() => setDropdownOpen(!dropdownOpen)} // Toggle dropdown on click
+              onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
             />
-
-            {/* Dropdown Menu */}
-            {dropdownOpen && (
+            {profileDropdownOpen && (
               <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-darkModal rounded-lg shadow-lg z-50">
                 <div className="flex items-center px-4 py-3">
                   <img
                     src={userInfo?.profileImage}
-                    alt={"Stell Johnson"}
+                    alt={"Profile"}
                     className="w-10 h-10 rounded-full"
                   />
                   <div className="ml-3 dark:text-white">
                     <p className="text-sm font-semibold">{userInfo?.name}</p>
-                    <p className="text-sm text-gray-600 dark:text-white">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       {userInfo?.email}
                     </p>
                   </div>
                 </div>
-                <hr />
-                <ul>
+                <div className="border-t border-gray-200 dark:border-gray-700" />
+                <ul className="py-2">
                   <li
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
                     className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
+                    onClick={() => router.push("/profile")}
                   >
-                    Upgrade To Premium
+                    Profile
                   </li>
                   <li
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
                     className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
+                    onClick={handleLogout}
                   >
-                    My Billing
-                  </li>
-                  <li
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
-                  >
-                    Advatacing
-                  </li>
-                  <li
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
-                  >
-                    My Account
-                  </li>
-                  <li
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex justify-between items-center px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
-                  >
-                    <button
-                      className="block w-full text-left py-2 "
-                      onClick={toggleDarkMode}
-                    >
-                      {darkMode ? (
-                        <div className="flex text-primary items-center gap-1">
-                          <TiWeatherSunny />
-                          <h1>Light</h1>
-                        </div>
-                      ) : (
-                        <div className="flex text-primary items-center gap-1">
-                          <BsMoonStarsFill />
-                          <h1>Dark</h1>
-                        </div>
-                      )}
-                    </button>
-                  </li>
-                  <li onClick={handleLogout} className="px-4 py-2 text-sm flex items-center gap-1 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer">
-                  <LuLogOut /> LogOut
+                    <LuLogOut className="inline mr-2" />
+                    Logout
                   </li>
                 </ul>
               </div>
             )}
           </div>
+
+          <div className="dark:hidden">
+            <TiWeatherSunny
+              size={30}
+              className="cursor-pointer"
+              onClick={toggleDarkMode}
+            />
+          </div>
+          <div className="hidden dark:block">
+            <BsMoonStarsFill
+              size={30}
+              className="cursor-pointer text-white"
+              onClick={toggleDarkMode}
+            />
+          </div>
         </div>
       </div>
     </nav>
   );
-}
+};
+
+export default NavBar;

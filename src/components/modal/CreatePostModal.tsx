@@ -209,7 +209,7 @@ const CreatePostModal = ({
             <select
               id="category"
               {...register("category", { required: true })}
-              className="w-full p-2 border rounded-md text-black dark:bg-darkBg dark:text-white"
+              className="w-full p-2 border rounded-md text-black  dark:bg-darkBg dark:text-white"
             >
               <option value="Gardening">Gardening</option>
               <option value="Indoor Plants">Indoor Plants</option>
@@ -232,7 +232,7 @@ const CreatePostModal = ({
             />
             {!imagePreviews.length ? (
               <p className="text-gray-300">
-                Add photos/videos or drag and drop
+                Add photos or drag and drop
               </p>
             ) : (
               <div className="flex flex-wrap gap-2 justify-start w-full">

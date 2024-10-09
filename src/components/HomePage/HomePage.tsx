@@ -6,7 +6,7 @@ const HomePage = () => {
   return (
     <div className="flex justify-around w-full px-5">
       {/* Left content area */}
-      <div className="">
+      <div>
         <div>
           <WhatsOnYourMind />
         </div>

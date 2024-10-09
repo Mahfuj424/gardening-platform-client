@@ -34,9 +34,6 @@ const postsApi = baseApi.injectEndpoints({
         method: "GET",
         params: arg,
       }),
-      // transformResponse: (response: TResponseSuccess) => {
-      //   return response?.data;
-      // },
       providesTags: [tagTypes.posts],
     }),
     getSinglePost: build.query({

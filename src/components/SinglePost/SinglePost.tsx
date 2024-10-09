@@ -1,36 +1,34 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useState } from "react";
-import { formatDistanceToNowStrict } from "date-fns";
-import {
-  useDeletePostMutation,
-  useGetAllPostsQuery,
-  useSavePostMutation,
-} from "@/redux/api/post";
-import { jsPDF } from "jspdf";
-import UserModal from "../modal/UserModal";
-import { BiDislike, BiLike, BiSolidDislike, BiSolidLike } from "react-icons/bi";
-import { FaFilePdf, FaRegComment } from "react-icons/fa";
-import { HiDotsHorizontal } from "react-icons/hi";
-import { PiShareFatLight } from "react-icons/pi";
-import DOMPurify from "dompurify"; // For sanitization
-import { RiDeleteBin5Fill, RiVerifiedBadgeFill } from "react-icons/ri";
+
+import { useCreateDislikeMutation } from "@/redux/api/dislikeApi";
+import { useCreateLikeMutation } from "@/redux/api/likeApi";
+import { useDeletePostMutation, useSavePostMutation } from "@/redux/api/post";
+import { useFollowUserMutation } from "@/redux/api/userApi";
+import { getUserInfo } from "@/services/authServices";
+
+import jsPDF from "jspdf";
+import { useState } from "react";
+import { toast } from "sonner";
 import PostSkeleton from "../loading/PostSkeleton";
-import PostComment from "./PostComment";
-import CreatePostModal from "../modal/CreatePostModal"; // Import CreatePostModal
+import Link from "next/link";
+import { RiDeleteBin5Fill, RiVerifiedBadgeFill } from "react-icons/ri";
+import UserModal from "../modal/UserModal";
+import { HiDotsHorizontal } from "react-icons/hi";
 import { BsBookmarkHeartFill } from "react-icons/bs";
 import { MdEditSquare } from "react-icons/md";
-import { useCreateLikeMutation } from "@/redux/api/likeApi";
-import { getUserInfo } from "@/services/authServices";
-import { toast } from "sonner";
-import { useCreateDislikeMutation } from "@/redux/api/dislikeApi";
+import { FaFilePdf, FaRegComment } from "react-icons/fa";
 import ConfirmationModal from "../modal/ConfirmationModal";
-import { useFollowUserMutation } from "@/redux/api/userApi";
-import Link from "next/link";
+import DOMPurify from "dompurify";
+import { BiDislike, BiLike, BiSolidDislike, BiSolidLike } from "react-icons/bi";
+import { PiShareFatLight } from "react-icons/pi";
+import PostComment from "../postCard/PostComment";
+import CreatePostModal from "../modal/CreatePostModal";
 import TruncatedContent from "../TruncatedContent/TruncatedContent";
 
-const PostCard = () => {
-  const { data, isLoading } = useGetAllPostsQuery({});
+
+const SinglePost = ({user, isLoading}:any) => {
 
   const [hoveredPost, setHoveredPost] = useState<string | null>(null); // For posts
   const [hoveredComment, setHoveredComment] = useState<string | null>(null); // For comments
@@ -40,12 +38,6 @@ const PostCard = () => {
   const userInfo = getUserInfo();
 
   // time format
-  const formatPostDate = (timestamp: string) => {
-    const date = new Date(timestamp);
-    return formatDistanceToNowStrict(date, { addSuffix: true })
-      .replace("about ", "") // Removes "about" for a more concise format
-      .replace(" ago", ""); // Removes "ago" for a clean Facebook-like appearance
-  };
 
   const handleMouseEnter = (postId: string) => {
     setHoveredPost(postId);
@@ -187,7 +179,7 @@ const PostCard = () => {
     }
   };
 
-  const postData = data?.data;
+  const postData = user?.posts;
 
   return (
     <div>
@@ -201,7 +193,7 @@ const PostCard = () => {
         postData?.map((item: any) => (
           <div
             key={item?._id}
-            className="dark:bg-darkCard w-[650px] bg-white shadow-md p-4 rounded-lg mt-4 relative"
+            className="dark:bg-darkCard w-[400px] bg-white shadow-md p-4 rounded-lg mt-4 relative"
           >
             {/* Post Header */}
             <div className="flex justify-between items-center">
@@ -243,7 +235,7 @@ const PostCard = () => {
                     </div>
                   </p>
                   <p className="text-xs text-gray-400">
-                    {formatPostDate(item?.createdAt)} ago
+                    1h ago
                   </p>
                 </div>
 
@@ -339,16 +331,16 @@ const PostCard = () => {
             {/* Post Actions */}
             <div className="flex justify-between px-3 mt-3 text-gray-400">
               <div>
-                <h1 className="text-green-600 font-medium text-sm">{item?.likes?.length} others</h1>
+                <h1>{item?.likes?.length}</h1>
               </div>
               <div>
-              <h1 className="text-green-600 font-medium text-sm">{item?.dislikes?.length} others</h1>
+                <span>{item?.dislikes?.length}</span>
               </div>
               <div>
-              <h1 className="text-green-600 font-medium text-sm">{item?.comments?.length} others</h1>
+                <span>{item?.comments?.length}</span>
               </div>
               <div>
-              <h1 className="text-green-600 font-medium text-sm">4 others</h1>
+                <span>500</span>
               </div>
             </div>
 
@@ -433,4 +425,4 @@ const PostCard = () => {
   );
 };
 
-export default PostCard;
+export default SinglePost;

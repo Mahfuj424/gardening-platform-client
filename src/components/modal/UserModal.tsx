@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useFollowUserMutation } from "@/redux/api/userApi";
+import Link from "next/link";
 import React from "react";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { SiMessenger } from "react-icons/si";
@@ -24,7 +25,7 @@ interface UserModalProps {
 }
 
 const UserModal: React.FC<UserModalProps> = ({ user, currentUser }) => {
-  const [followUser, { isLoading }] = useFollowUserMutation(); // Destructuring to include isLoading
+  const [followUser] = useFollowUserMutation(); // Destructuring to include isLoading
 
   const handleFollowUser = async (followeeId: string) => {
     try {
@@ -72,8 +73,8 @@ const UserModal: React.FC<UserModalProps> = ({ user, currentUser }) => {
                   Following
                 </button>
               ) : (
-                <button className="bg-custom-gradient px-4 py-2 rounded-md text-white font-semibold" disabled={isLoading}>
-                  {isLoading ? "Following..." : "Follow"}
+                <button className="bg-custom-gradient px-4 py-2 rounded-md text-white font-semibold" >
+                  Follow
                 </button>
               )}
             </div>
@@ -91,7 +92,7 @@ const UserModal: React.FC<UserModalProps> = ({ user, currentUser }) => {
         </div>
       </div>
       <div>
-        <h1 className="text-blue-500 cursor-pointer text-sm mt-2">See All Posts</h1>
+        <Link href={`/user/${user?._id}`} className="text-blue-500 cursor-pointer text-sm mt-2">See All Posts</Link>
       </div>
     </div>
   );
