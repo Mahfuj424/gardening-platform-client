@@ -1,12 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { MdOutlineNotificationsActive } from "react-icons/md";
+import {
+  MdOutlineContactPage,
+  MdOutlineNotificationsActive,
+} from "react-icons/md";
 import { TiWeatherSunny } from "react-icons/ti";
 import { BsMoonStarsFill } from "react-icons/bs";
 import { logoutUser } from "@/services/actions/logoutUser";
 import { getUserInfo } from "@/services/authServices";
 import { LuLogOut } from "react-icons/lu";
-import { RiMessengerLine } from "react-icons/ri";
+import { RiContactsBook3Line, RiMessengerLine } from "react-icons/ri";
+import Link from "next/link";
 
 interface NavBarProps {
   darkMode: boolean;
@@ -19,10 +23,9 @@ interface UserInfo {
   email?: string;
 }
 
-const NavBar: React.FC<NavBarProps> = ({  toggleDarkMode }) => {
+const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
   const router = useRouter();
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const filterDropdownRef = useRef<HTMLDivElement>(null);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
@@ -37,28 +40,8 @@ const NavBar: React.FC<NavBarProps> = ({  toggleDarkMode }) => {
 
   const handleLogout = () => {
     logoutUser(router);
-    router.push('/auth/register');
+    router.push("/auth/register");
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        filterDropdownRef.current && 
-        !filterDropdownRef.current.contains(event.target as Node) && 
-        !profileDropdownRef.current?.contains(event.target as Node)
-      ) {
-        setFilterDropdownOpen(false);
-        setProfileDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [filterDropdownRef, profileDropdownRef]);
-
-
 
 
 
@@ -76,7 +59,16 @@ const NavBar: React.FC<NavBarProps> = ({  toggleDarkMode }) => {
           </h1>
         </div>
 
-        
+        <div className="flex gap-10 dark:text-gray-100">
+          <Link href={`/contact`} className="flex items-center gap-1">
+            <RiContactsBook3Line className="text-2xl" />
+            <h1>Contact</h1>
+          </Link>
+          <Link href={`/about`} className="flex items-center">
+            <MdOutlineContactPage className="text-2xl" />
+            <h1>About</h1>
+          </Link>
+        </div>
 
         <div className="flex gap-5 items-center relative">
           <div className="relative group">
@@ -151,16 +143,16 @@ const NavBar: React.FC<NavBarProps> = ({  toggleDarkMode }) => {
           </div>
 
           <div className="dark:hidden">
-            <TiWeatherSunny
-              size={30}
+            <BsMoonStarsFill
+              size={25}
               className="cursor-pointer"
               onClick={toggleDarkMode}
             />
           </div>
           <div className="hidden dark:block">
-            <BsMoonStarsFill
+            <TiWeatherSunny
               size={30}
-              className="cursor-pointer text-white"
+              className="cursor-pointer text-gray-300"
               onClick={toggleDarkMode}
             />
           </div>

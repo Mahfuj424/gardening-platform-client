@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import {
   useDeletePostMutation,
-  useGetAllPostsQuery,
   useSavePostMutation,
 } from "@/redux/api/post";
 import { jsPDF } from "jspdf";
@@ -29,8 +28,7 @@ import { useFollowUserMutation } from "@/redux/api/userApi";
 import Link from "next/link";
 import TruncatedContent from "../TruncatedContent/TruncatedContent";
 
-const PostCard = () => {
-  const { data, isLoading } = useGetAllPostsQuery({});
+const PostCard = ({postData, isLoading}:any) => {
 
   const [hoveredPost, setHoveredPost] = useState<string | null>(null); // For posts
   const [hoveredComment, setHoveredComment] = useState<string | null>(null); // For comments
@@ -187,7 +185,7 @@ const PostCard = () => {
     }
   };
 
-  const postData = data?.data;
+  
 
   return (
     <div>
