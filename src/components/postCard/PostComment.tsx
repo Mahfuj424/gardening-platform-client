@@ -81,7 +81,7 @@ const PostComment: React.FC<PostCommentProps> = ({
       commentText,
       commentImage,
     };
-
+    
     const res = await createComment({
       commentObject,
       postId: item?._id,
@@ -164,7 +164,7 @@ const PostComment: React.FC<PostCommentProps> = ({
             className="text-xs cursor-pointer dark:text-gray-100"
             onClick={() => setShowAllComments((prev) => !prev)}
           >
-            {showAllComments ? "Hide Comments" : "See All Comments"}
+            {showAllComments ? "Hide Comments" : "view more Comments"}
           </h1>
         )}
 

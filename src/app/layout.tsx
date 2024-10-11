@@ -44,7 +44,11 @@ export default function RootLayout({
       <body className={`${darkMode ? "dark" : ""}`}>
         <Providers>
           {/* Pass darkMode and toggleDarkMode as props to NavBar */}
-          {path === "/auth/login" || path === "/auth/register" ? (
+          {path === "/auth/login" ||
+          path === "/auth/register" ||
+          path === "/dashboard/admin" ||
+          path === "/dashboard/admin/posts" ||
+          path === "/dashboard/admin/users" ? (
             ""
           ) : (
             <NavBar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />

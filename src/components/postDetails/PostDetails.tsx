@@ -1,31 +1,35 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useState } from "react";
-import { formatDistanceToNowStrict } from "date-fns";
+
+import { useCreateDislikeMutation } from "@/redux/api/dislikeApi";
+import { useCreateLikeMutation } from "@/redux/api/likeApi";
 import { useDeletePostMutation, useSavePostMutation } from "@/redux/api/post";
-import { jsPDF } from "jspdf";
-import UserModal from "../modal/UserModal";
-import { BiDislike, BiLike, BiSolidDislike, BiSolidLike } from "react-icons/bi";
-import { FaFilePdf, FaRegComment } from "react-icons/fa";
-import { HiDotsHorizontal } from "react-icons/hi";
-import { PiShareFatLight } from "react-icons/pi";
-import DOMPurify from "dompurify"; // For sanitization
-import { RiDeleteBin5Fill, RiVerifiedBadgeFill } from "react-icons/ri";
+import { useFollowUserMutation } from "@/redux/api/userApi";
+import { getUserInfo } from "@/services/authServices";
+
+import jsPDF from "jspdf";
+import { useState } from "react";
+import { toast } from "sonner";
 import PostSkeleton from "../loading/PostSkeleton";
-import PostComment from "./PostComment";
-import CreatePostModal from "../modal/CreatePostModal"; // Import CreatePostModal
+import Link from "next/link";
+import { RiDeleteBin5Fill, RiVerifiedBadgeFill } from "react-icons/ri";
+import UserModal from "../modal/UserModal";
+import { HiDotsHorizontal } from "react-icons/hi";
 import { BsBookmarkHeartFill } from "react-icons/bs";
 import { MdEditSquare } from "react-icons/md";
-import { useCreateLikeMutation } from "@/redux/api/likeApi";
-import { getUserInfo } from "@/services/authServices";
-import { toast } from "sonner";
-import { useCreateDislikeMutation } from "@/redux/api/dislikeApi";
+import { FaFilePdf, FaRegComment } from "react-icons/fa";
 import ConfirmationModal from "../modal/ConfirmationModal";
-import { useFollowUserMutation } from "@/redux/api/userApi";
-import Link from "next/link";
+import DOMPurify from "dompurify";
+import { BiDislike, BiLike, BiSolidDislike, BiSolidLike } from "react-icons/bi";
+import { PiShareFatLight } from "react-icons/pi";
+import PostComment from "../postCard/PostComment";
+import CreatePostModal from "../modal/CreatePostModal";
 import TruncatedContent from "../TruncatedContent/TruncatedContent";
 
-const PostCard = ({ postData, isLoading }: any) => {
+
+const PostDetailsCard = ({item, isLoading}:any) => {
+
   const [hoveredPost, setHoveredPost] = useState<string | null>(null); // For posts
   const [hoveredComment, setHoveredComment] = useState<string | null>(null); // For comments
   const [modalOpen, setModalOpen] = useState<string | null>(null); // Modal for options
@@ -34,12 +38,6 @@ const PostCard = ({ postData, isLoading }: any) => {
   const userInfo = getUserInfo();
 
   // time format
-  const formatPostDate = (timestamp: string) => {
-    const date = new Date(timestamp);
-    return formatDistanceToNowStrict(date, { addSuffix: true })
-      .replace("about ", "") // Removes "about" for a more concise format
-      .replace(" ago", ""); // Removes "ago" for a clean Facebook-like appearance
-  };
 
   const handleMouseEnter = (postId: string) => {
     setHoveredPost(postId);
@@ -181,6 +179,8 @@ const PostCard = ({ postData, isLoading }: any) => {
     }
   };
 
+
+
   return (
     <div>
       {isLoading ? (
@@ -190,10 +190,10 @@ const PostCard = ({ postData, isLoading }: any) => {
           <PostSkeleton />
         </>
       ) : (
-        postData?.map((item: any) => (
+   
           <div
             key={item?._id}
-            className="dark:bg-darkCard w-[650px] bg-white shadow-md p-4 rounded-lg mt-4 relative"
+            className="dark:bg-darkCard w-[400px] bg-white shadow-md p-4 rounded-lg mt-4 relative"
           >
             {/* Post Header */}
             <div className="flex justify-between items-center">
@@ -210,8 +210,7 @@ const PostCard = ({ postData, isLoading }: any) => {
                 />
                 <div>
                   <p className="dark:text-white flex items-center gap-2 text-black font-semibold">
-                    <Link
-                      href={`/user/${item?.author?._id}`}
+                    <Link href={`/user/${item?.author?._id}`}
                       onMouseEnter={() => handleMouseEnter(item?._id)}
                       className="cursor-pointer hover:underline"
                     >
@@ -236,7 +235,7 @@ const PostCard = ({ postData, isLoading }: any) => {
                     </div>
                   </p>
                   <p className="text-xs text-gray-400">
-                    {formatPostDate(item?.createdAt)} ago
+                    1h ago
                   </p>
                 </div>
 
@@ -313,42 +312,24 @@ const PostCard = ({ postData, isLoading }: any) => {
                   __html: DOMPurify.sanitize(item?.title),
                 }}
               />
-              <TruncatedContent item={item} />
+              <TruncatedContent item={item}/>
             </div>
 
-            {/* Post Image */}
-            <div>
-              {item?.images?.length > 0 &&
-                item?.images?.map((image: any) => (
-                  <Link key={image} href={`/post-details/${item?._id}`}>
-                    <img
-                      src={image}
-                      alt="Post"
-                      className="w-full mt-3 rounded-lg"
-                    />
-                  </Link>
-                ))}
-            </div>
+           
 
             {/* Post Actions */}
             <div className="flex justify-between px-3 mt-3 text-gray-400">
               <div>
-                <h1 className="text-green-600 font-medium text-sm">
-                  {item?.likes?.length} others
-                </h1>
+                <h1>{item?.likes?.length}</h1>
               </div>
               <div>
-                <h1 className="text-green-600 font-medium text-sm">
-                  {item?.dislikes?.length} others
-                </h1>
+                <span>{item?.dislikes?.length}</span>
               </div>
               <div>
-                <h1 className="text-green-600 font-medium text-sm">
-                  {item?.comments?.length} others
-                </h1>
+                <span>{item?.comments?.length}</span>
               </div>
               <div>
-                <h1 className="text-green-600 font-medium text-sm">4 others</h1>
+                <span>500</span>
               </div>
             </div>
 
@@ -415,7 +396,6 @@ const PostCard = ({ postData, isLoading }: any) => {
               handleMouseEnterComment={handleMouseEnterComment}
             />
           </div>
-        ))
       )}
 
       {/* Edit Post Modal */}
@@ -433,4 +413,4 @@ const PostCard = ({ postData, isLoading }: any) => {
   );
 };
 
-export default PostCard;
+export default PostDetailsCard;

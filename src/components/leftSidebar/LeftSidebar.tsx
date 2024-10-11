@@ -37,9 +37,9 @@ export default function LeftSidebar() {
       route: "pages",
     },
     {
-      title: "About Us",
+      title: "Group",
       imageUrl: "https://i.ibb.co/XCQhKGQ/group.png",
-      route: "about",
+      route: "group",
     },
     {
       title: "Market",

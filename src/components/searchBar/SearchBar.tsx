@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client'
+"use client";
 import React, { useState, useRef } from "react";
 import { IoSearch, IoFilterSharp } from "react-icons/io5";
 
 // Add onSearch and onFilter as props
-const SearchBar = ({ onSearch, onFilter }:any) => {
+const SearchBar = ({ onSearch, onFilter }: any) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
   const filterDropdownRef = useRef<HTMLDivElement>(null);
@@ -38,32 +38,35 @@ const SearchBar = ({ onSearch, onFilter }:any) => {
   return (
     <div>
       <div className="relative w-full flex items-center gap-2 mt-4">
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3">
-          <IoSearch className="text-gray-500 dark:text-gray-300" />
-        </div>
-        <input
-          type="text"
-          placeholder="Search Garden Content"
-          className="pl-10 w-full px-4 py-2 rounded-md border dark:text-white dark:border-none bg-gray-100 border-gray-300 dark:bg-darkModal outline-none  focus:ring-2 focus:ring-[#00984b]"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          aria-label="Search garden content"
-        />
-        <button
-          className="bg-custom-gradient text-white px-4 py-2 rounded"
-          onClick={handleSearch}
-        >
-          Search
-        </button>
-        <div className="relative" ref={filterDropdownRef}>
-          <IoFilterSharp
-            className="text-xl cursor-pointer dark:text-white"
-            onClick={() => setFilterDropdownOpen(!filterDropdownOpen)}
-            title="Filter"
-            aria-label="Filter options"
+        <div className="relative w-full">
+          {/* Search Icon */}
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+            <IoSearch className="text-gray-500 dark:text-gray-300" />
+          </div>
+
+          {/* Filter Icon */}
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+            <IoFilterSharp
+              className="text-xl cursor-pointer dark:text-white"
+              onClick={() => setFilterDropdownOpen(!filterDropdownOpen)}
+              title="Filter"
+              aria-label="Filter options"
+            />
+          </div>
+
+          {/* Search Input */}
+          <input
+            type="text"
+            placeholder="Search Garden Content"
+            className="pl-10 pr-10 w-full px-4 py-2 rounded-md border dark:text-white dark:border-none bg-gray-100 border-green-500 dark:bg-darkModal outline-none focus:ring-2 focus:ring-[#00984b]"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            aria-label="Search garden content"
           />
+
+          {/* Filter Dropdown */}
           {filterDropdownOpen && (
-            <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-darkModal rounded-lg shadow-lg z-50">
+            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-darkModal rounded-lg shadow-lg z-50">
               <ul className="py-2">
                 <li
                   onClick={() => handleFilterOptionClick("like")}
@@ -87,6 +90,13 @@ const SearchBar = ({ onSearch, onFilter }:any) => {
             </div>
           )}
         </div>
+
+        <button
+          className="bg-custom-gradient text-white px-4 py-2 rounded"
+          onClick={handleSearch}
+        >
+          Search
+        </button>
       </div>
     </div>
   );

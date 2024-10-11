@@ -2,7 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   MdOutlineContactPage,
+  MdOutlineDashboardCustomize,
   MdOutlineNotificationsActive,
+  MdOutlineWorkspacePremium,
 } from "react-icons/md";
 import { TiWeatherSunny } from "react-icons/ti";
 import { BsMoonStarsFill } from "react-icons/bs";
@@ -40,7 +42,7 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
 
   const handleLogout = () => {
     logoutUser(router);
-    router.push("/auth/register");
+    router.push("/auth/login");
   };
 
 
@@ -128,7 +130,15 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
                     className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
                     onClick={() => router.push("/profile")}
                   >
-                    Profile
+                    <MdOutlineWorkspacePremium className="inline mr-2" />
+                    upgrade to premium
+                  </li>
+                  <li
+                    className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
+                    onClick={() => router.push("/dashboard/admin")}
+                  >
+                    <MdOutlineDashboardCustomize className="inline mr-2" />
+                    Dashboard
                   </li>
                   <li
                     className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"

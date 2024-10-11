@@ -37,8 +37,8 @@ const postsApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.posts],
     }),
     getSinglePost: build.query({
-      query: (flatId) => ({
-        url: `/post/${flatId}`,
+      query: (postId) => ({
+        url: `/post/post/${postId}`,
         method: "GET",
       }),
       providesTags: [tagTypes.posts],

@@ -4,14 +4,23 @@ import { baseApi } from "./baseApi";
 export const userApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getAllUser: build.query({
-      query: () => ({
-        url: "/user/all-users",
-        method: "GET",
-      }),
+      query: (isPremium) => {
+        // If isPremium is undefined, do not include it in the query string
+        let url = "/user/all-users";
+        if (isPremium !== undefined) {
+          url += `?premiumAccess=${isPremium}`;
+        }
+
+        return {
+          url,
+          method: "GET",
+        };
+      },
       providesTags: [tagTypes.users],
     }),
+
     followUser: build.mutation({
-      query: ({followInfo}) => {
+      query: ({ followInfo }) => {
         return {
           url: `/user/follow`,
           method: "POST",
@@ -38,15 +47,17 @@ export const userApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      providesTags: [tagTypes.users, tagTypes.posts, tagTypes.likes, tagTypes.dislikes, tagTypes.comments],
+      providesTags: [
+        tagTypes.users,
+        tagTypes.posts,
+        tagTypes.likes,
+        tagTypes.dislikes,
+        tagTypes.comments,
+      ],
     }),
-    
+
     updateProfile: build.mutation({
       query: ({ data, id }) => {
-        // Console log the data and id
-        console.log("ID:", id);
-        console.log("Data:", data);
-    
         return {
           url: `/user/user/${id}`,
           method: "PATCH",
@@ -55,7 +66,18 @@ export const userApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.users],
     }),
-    
+
+    updateUserRole: build.mutation({
+      query: ({ id, role }) => {
+        console.log(id, role);
+        return {
+          url: `/user/update-role/${id}`,
+          method: "PATCH",
+          body: {role},
+        };
+      },
+      invalidatesTags: [tagTypes.users],
+    }),
   }),
 });
 
@@ -65,4 +87,5 @@ export const {
   useForgotPassowrdMutation,
   useGetSingleProfileQuery,
   useUpdateProfileMutation,
+  useUpdateUserRoleMutation,
 } = userApi;
