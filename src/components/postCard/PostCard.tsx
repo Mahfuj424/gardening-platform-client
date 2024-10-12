@@ -181,6 +181,8 @@ const PostCard = ({ postData, isLoading }: any) => {
     }
   };
 
+
+
   return (
     <div>
       {isLoading ? (
@@ -320,7 +322,7 @@ const PostCard = ({ postData, isLoading }: any) => {
             <div>
               {item?.images?.length > 0 &&
                 item?.images?.map((image: any) => (
-                  <Link key={image} href={`/post-details/${item?._id}`}>
+                  <Link key={image} href={userInfo?.isVerified ? `/post-details/${item?._id}` : '/'}>
                     <img
                       src={image}
                       alt="Post"

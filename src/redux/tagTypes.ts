@@ -4,7 +4,8 @@ export enum tagTypes {
   comments = "comments",
   profile = "profile",
   likes= "likes",
-  dislikes="dislikes"
+  dislikes="dislikes",
+  payments='payments'
 }
 
-export const tagTypeList = [tagTypes.users, tagTypes.likes, tagTypes.dislikes, tagTypes.comments, tagTypes.posts, tagTypes.profile];
+export const tagTypeList = [tagTypes.users, tagTypes.payments, tagTypes.likes, tagTypes.dislikes, tagTypes.comments, tagTypes.posts, tagTypes.profile];

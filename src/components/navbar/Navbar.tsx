@@ -13,6 +13,7 @@ import { getUserInfo } from "@/services/authServices";
 import { LuLogOut } from "react-icons/lu";
 import { RiContactsBook3Line, RiMessengerLine } from "react-icons/ri";
 import Link from "next/link";
+import { useCreatePaymentMutation } from "@/redux/api/paymentApi";
 
 interface NavBarProps {
   darkMode: boolean;
@@ -23,7 +24,9 @@ interface UserInfo {
   profileImage?: string;
   name?: string;
   email?: string;
-  role?:string
+  role?: string;
+  isVerified: boolean;
+  premiumAccess: boolean;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
@@ -46,7 +49,20 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
     router.push("/auth/login");
   };
 
-
+  const [createPayment] = useCreatePaymentMutation();
+  const handlePayment = async () => {
+    const paymentObject = {
+      totalAmount: 150.75,
+      customerName: userInfo?.name,
+      customerEmail: userInfo?.email,
+    };
+    try {
+      const res = await createPayment(paymentObject).unwrap();
+      window.location.href = res?.data?.payment_url;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white dark:bg-darkCard shadow-md z-50">
@@ -127,13 +143,18 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
                 </div>
                 <div className="border-t border-gray-200 dark:border-gray-700" />
                 <ul className="py-2">
-                  <li
-                    className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
-                    onClick={() => router.push("/profile")}
-                  >
-                    <MdOutlineWorkspacePremium className="inline mr-2" />
-                    upgrade to premium
-                  </li>
+                  {userInfo?.isVerified === true &&
+                  userInfo?.premiumAccess === true ? (
+                    <li
+                      className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
+                      onClick={handlePayment}
+                    >
+                      <MdOutlineWorkspacePremium className="inline mr-2" />
+                      upgrade to premium
+                    </li>
+                  ) : (
+                    ""
+                  )}
                   <li
                     className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
                     onClick={() => router.push(`/dashboard/${userInfo?.role}`)}
