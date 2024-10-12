@@ -14,7 +14,17 @@ const dislikeApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.posts, tagTypes.dislikes], // Cache invalidation
     }),
+
+    getAllDislikes: build.query({
+      query: () => {
+        return {
+          url: '/dislikes',
+          method: "GET",
+        };
+      },
+      providesTags: [tagTypes.dislikes],
+    }),
   }),
 });
 
-export const { useCreateDislikeMutation } = dislikeApi;
+export const { useCreateDislikeMutation, useGetAllDislikesQuery } = dislikeApi;

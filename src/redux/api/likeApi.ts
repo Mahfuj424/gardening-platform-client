@@ -14,7 +14,17 @@ const likeApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.posts, tagTypes.likes], // Cache invalidation
     }),
+
+    getAllLikes: build.query({
+      query: () => {
+        return {
+          url: '/likes',
+          method: "GET",
+        };
+      },
+      providesTags: [tagTypes.likes],
+    }),
   }),
 });
 
-export const { useCreateLikeMutation } = likeApi;
+export const { useCreateLikeMutation, useGetAllLikesQuery } = likeApi;

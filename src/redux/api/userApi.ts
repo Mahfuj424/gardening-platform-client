@@ -10,7 +10,6 @@ export const userApi = baseApi.injectEndpoints({
         if (isPremium !== undefined) {
           url += `?premiumAccess=${isPremium}`;
         }
-
         return {
           url,
           method: "GET",

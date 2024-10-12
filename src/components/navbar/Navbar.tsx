@@ -23,6 +23,7 @@ interface UserInfo {
   profileImage?: string;
   name?: string;
   email?: string;
+  role?:string
 }
 
 const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
@@ -135,7 +136,7 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
                   </li>
                   <li
                     className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
-                    onClick={() => router.push("/dashboard/admin")}
+                    onClick={() => router.push(`/dashboard/${userInfo?.role}`)}
                   >
                     <MdOutlineDashboardCustomize className="inline mr-2" />
                     Dashboard

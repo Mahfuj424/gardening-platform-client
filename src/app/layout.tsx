@@ -47,6 +47,9 @@ export default function RootLayout({
           {path === "/auth/login" ||
           path === "/auth/register" ||
           path === "/dashboard/admin" ||
+          path === "/dashboard/user" ||
+          path === "/dashboard/user/following" ||
+          path === "/dashboard/user/followers" ||
           path === "/dashboard/admin/posts" ||
           path === "/dashboard/admin/users" ? (
             ""

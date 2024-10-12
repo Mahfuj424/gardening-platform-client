@@ -34,8 +34,17 @@ const commentApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.comments, tagTypes.posts],
     }),
+
+
+    getAllComments: build.query({
+      query: () => ({
+        url: `/comments`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.comments],
+    }),
   }),
 });
 
-export const { useCreateCommentMutation, useUpdateCommentMutation, useDeleteCommentMutation } =
+export const { useCreateCommentMutation, useGetAllCommentsQuery, useUpdateCommentMutation, useDeleteCommentMutation } =
   commentApi;
