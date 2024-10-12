@@ -11,6 +11,7 @@
   "dependencies": {
     "@canvasjs/react-charts": "^1.0.2",
     "@reduxjs/toolkit": "^2.2.7",
+    "ag-charts-react": "^10.2.0",
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
     "dompurify": "^3.1.7",
