@@ -5,7 +5,7 @@ const paymentApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     createPayment: build.mutation({
       query: (paymentObject) => {
-        console.log("Sending payment object to API:", paymentObject);
+        // console.log("Sending payment object to API:", paymentObject);
         return {
           url: `/payment/create`, // Ensure the correct endpoint
           method: "POST",

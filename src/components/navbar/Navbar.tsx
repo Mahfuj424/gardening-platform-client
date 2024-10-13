@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+'use client'
+
 import {
   MdOutlineContactPage,
   MdOutlineDashboardCustomize,
@@ -14,6 +14,8 @@ import { LuLogOut } from "react-icons/lu";
 import { RiContactsBook3Line, RiMessengerLine } from "react-icons/ri";
 import Link from "next/link";
 import { useCreatePaymentMutation } from "@/redux/api/paymentApi";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface NavBarProps {
   darkMode: boolean;
@@ -79,11 +81,11 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
         </div>
 
         <div className="flex gap-10 dark:text-gray-100">
-          <Link href={`/contact`} className="flex items-center gap-1">
+          <Link href={`/contact-us`} className="flex items-center gap-1">
             <RiContactsBook3Line className="text-2xl" />
             <h1>Contact</h1>
           </Link>
-          <Link href={`/about`} className="flex items-center">
+          <Link href={`/about-us`} className="flex items-center">
             <MdOutlineContactPage className="text-2xl" />
             <h1>About</h1>
           </Link>

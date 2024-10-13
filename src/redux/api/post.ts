@@ -18,7 +18,7 @@ const postsApi = baseApi.injectEndpoints({
 
     savePost: build.mutation({
       query: ({ saveData }) => {
-        console.log("Saving post data:", saveData); // Log the saveData here
+        // console.log("Saving post data:", saveData); // Log the saveData here
         return {
           url: `/favorite/create-favorite`,
           method: "POST",
@@ -45,7 +45,7 @@ const postsApi = baseApi.injectEndpoints({
     }),
     updatePost: build.mutation({
       query: ({ updateData, postId }) => {
-        console.log({ updateData, postId });
+        // console.log({ updateData, postId });
         return {
           url: `/post/post/${postId}`, // Use the postId in the URL
           method: "PATCH",

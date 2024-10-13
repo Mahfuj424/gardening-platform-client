@@ -19,37 +19,37 @@ export default function LeftSidebar() {
     {
       title: "Message",
       imageUrl: "https://i.ibb.co/qm0qrnj/message.png",
-      route: "message",
+      route: "/",
     },
     {
       title: "Video",
       imageUrl: "https://i.ibb.co/37cK4t8/video.png",
-      route: "video",
+      route: "/",
     },
     {
       title: "Event",
       imageUrl: "https://i.ibb.co/S774Y82/event-2.png",
-      route: "event",
+      route: "/",
     },
     {
       title: "Pages",
       imageUrl: "https://i.ibb.co/NmYLtgc/page.png",
-      route: "pages",
+      route: "/",
     },
     {
       title: "Group",
       imageUrl: "https://i.ibb.co/XCQhKGQ/group.png",
-      route: "group",
+      route: "/",
     },
     {
       title: "Market",
       imageUrl: "https://i.ibb.co/SmmrTWp/market.png",
-      route: "market",
+      route: "/",
     },
     {
       title: "Blog",
       imageUrl: "https://i.ibb.co/jwq7dGD/blog.png",
-      route: "blog",
+      route: "/",
     },
   ];
 

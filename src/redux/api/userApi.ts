@@ -40,7 +40,7 @@ export const userApi = baseApi.injectEndpoints({
     }),
     getSingleProfile: build.query({
       query: (id) => {
-        console.log("Fetched user ID:", id); // Logs the ID before sending the request
+        // console.log("Fetched user ID:", id); // Logs the ID before sending the request
         return {
           url: `/user/${id}`,
           method: "GET",

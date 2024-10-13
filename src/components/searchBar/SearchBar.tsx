@@ -69,6 +69,12 @@ const SearchBar = ({ onSearch, onFilter }: any) => {
             <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-darkModal rounded-lg shadow-lg z-50">
               <ul className="py-2">
                 <li
+                  onClick={() => handleFilterOptionClick("")}
+                  className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
+                >
+                  Default Posts
+                </li>
+                <li
                   onClick={() => handleFilterOptionClick("like")}
                   className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
                 >

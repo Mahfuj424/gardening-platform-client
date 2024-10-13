@@ -8,6 +8,7 @@ import "react-quill/dist/quill.snow.css"; // Import the styles for Quill editor
 import { useCreatePostMutation, useUpdatePostMutation } from "@/redux/api/post"; // Import update mutation
 import { toast } from "sonner";
 import { getUserInfo } from "@/services/authServices";
+import { MdWorkspacePremium } from "react-icons/md";
 
 const CreatePostModal = ({
   isOpen,
@@ -24,6 +25,7 @@ const CreatePostModal = ({
   const [newImages, setNewImages] = useState<File[]>([]); // Store newly added images as File objects
   const [createPost] = useCreatePostMutation();
   const [updatePost] = useUpdatePostMutation(); // New hook for updating posts
+  const [isPremium, setIsPremium] = useState(false); // State for isPremium
   const userInfo = getUserInfo();
   const imgbbApiKey = "2167989ee53b7a504211edcff02ebe5b";
 
@@ -76,6 +78,10 @@ const CreatePostModal = ({
     return urls;
   };
 
+  const handleTogglePremium = () => {
+    setIsPremium((prev) => !prev); // Toggle between true and false
+  };
+
   // Separate function for creating a post
   const handleCreatePost = async (data: any) => {
     const { category } = data;
@@ -92,7 +98,7 @@ const CreatePostModal = ({
 
     const postData = {
       author: userInfo?._id,
-      isPremium: userInfo?.premiumAccess,
+      isPremium, // Add isPremium to post data
       title: editorTitle,
       content: editorContent,
       category,
@@ -115,7 +121,6 @@ const CreatePostModal = ({
 
   // Separate function for updating a post
   const handleUpdatePost = async (data: any) => {
-    console.log(data);
     const { category } = data;
 
     let uploadedImageUrls: string[] = [];
@@ -130,7 +135,7 @@ const CreatePostModal = ({
 
     const updateData = {
       author: userInfo?._id,
-      isPremium: userInfo?.premiumAccess,
+      isPremium, // Add isPremium to update data
       title: editorTitle,
       content: editorContent,
       category,
@@ -139,10 +144,8 @@ const CreatePostModal = ({
         ...uploadedImageUrls,
       ],
     };
-    console.log(updateData);
 
-    const res = await updatePost({updateData, postId }).unwrap(); // Call the update mutation
-    console.log(res);
+    const res = await updatePost({ updateData, postId }).unwrap(); // Call the update mutation
     if (res?.success) {
       toast.success(res?.message);
     } else {
@@ -181,7 +184,17 @@ const CreatePostModal = ({
         >
           {/* Title input */}
           <div className="mb-4 dark:text-white">
-            <label className="block mb-1 dark:text-white">Title:</label>
+            <div className="flex justify-between">
+              <label className="block mb-1 dark:text-white">Title:</label>
+              <div
+                className={`flex items-center cursor-pointer ${
+                  isPremium ? "text-blue-500" : "text-gray-400"
+                }`}
+                onClick={handleTogglePremium} // Toggle on click
+              >
+                <MdWorkspacePremium className="" /> isPremium
+              </div>
+            </div>
             <ReactQuill
               value={editorTitle}
               onChange={setEditorTitle}
@@ -222,57 +235,51 @@ const CreatePostModal = ({
   
           {/* Image upload section */}
           <div className="border border-dashed border-black dark:border-gray-300 text-center mb-2 flex flex-wrap items-center justify-center relative w-full min-h-[150px] px-4">
+            <div className="flex flex-wrap items-center justify-center">
+              {imagePreviews.map((imageUrl, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={imageUrl}
+                    alt={`Preview ${index}`}
+                    className="w-24 h-24 object-cover m-2"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                    onClick={() =>
+                      handleRemoveImage(index, index < defaultImages.length)
+                    }
+                  >
+                    &#10005;
+                  </button>
+                </div>
+              ))}
+            </div>
+  
             <input
               type="file"
+              id="image-upload"
               multiple
-              accept="image/*"
-              {...register("images")}
-              className="absolute opacity-0 w-full h-full cursor-pointer"
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               onChange={handleImageSelection}
             />
-            {!imagePreviews.length ? (
-              <p className="text-gray-300">
-                Add photos or drag and drop
-              </p>
-            ) : (
-              <div className="flex flex-wrap gap-2 justify-start w-full">
-                {imagePreviews?.map((url: string, index: number) => (
-                  <div
-                    key={index}
-                    className="relative w-20 h-20 md:w-24 md:h-24"
-                  >
-                    <img
-                      src={url}
-                      alt="Preview"
-                      className="w-full h-full object-cover rounded-md"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleRemoveImage(index, index < defaultImages.length)
-                      }
-                      className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
-                    >
-                      &times;
-                    </button>
-                  </div>
-                ))}
-              </div>
+            {imagePreviews.length === 0 && (
+              <p className="dark:text-white">Click to upload images</p>
             )}
           </div>
   
-          {/* Submit button */}
-          <button
-            type="submit"
-            className="bg-custom-gradient w-full text-white px-4 py-2 rounded-md mt-4"
-          >
-            {defaultTitle !== '' && defaultContent !== '' ? "Update Post" : "Create Post"}
-          </button>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="bg-custom-gradient w-full text-white px-4 py-2 rounded-md"
+            >
+              {defaultTitle !== '' && defaultContent !== '' ? "Update Post" : "Create Post"}
+            </button>
+          </div>
         </form>
       </div>
     </div>
   );
-  
 };
 
 export default CreatePostModal;

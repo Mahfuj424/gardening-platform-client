@@ -35,3 +35,35 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 # gardening-platform-client
+
+# project structure-1
+app/
+  ├── api/
+  │   └── hello/
+  │       └── route.ts            # API endpoint (e.g., GET /api/hello)
+  ├── dashboard/
+  │   ├── layout.tsx              # Dashboard layout
+  │   ├── page.tsx                # Dashboard home (e.g., /dashboard)
+  │   └── user/
+  │       ├── followers/
+  │       │   └── page.tsx        # Followers list (e.g., /dashboard/user/followers)
+  │       └── page.tsx            # User profile (e.g., /dashboard/user)
+  ├── about/
+  │   └── page.tsx                # About p
+
+
+
+app/
+  ├── api/
+  │   └── hello/
+  │       └── route.ts            # API endpoint (TypeScript)
+  ├── dashboard/
+  │   ├── layout.tsx              # Dashboard layout (TypeScript)
+  │   ├── page.tsx                # Dashboard home (TypeScript)
+  │   └── user/
+  │       ├── followers/
+  │       │   └── page.tsx        # Followers list (TypeScript)
+  │       └── page.tsx            # User profile (TypeScript)
+  ├── about/
+  │   └── page.tsx                # About page (TypeScript)
+  ├── layout.tsx
