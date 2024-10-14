@@ -9,11 +9,13 @@ export const storeUserInfo = (accessToken: string) => {
 };
 
 export const getUserInfo = () => {
-  const authToken = localStorage.getItem(authKey);
-  if (authToken) {
-    const decodedInfo: any = jwtDecode(authToken);
-    return {
-      ...decodedInfo
+  if (typeof window !== undefined) {
+    const authToken = localStorage.getItem(authKey);
+    if (authToken) {
+      const decodedInfo: any = jwtDecode(authToken);
+      return {
+        ...decodedInfo
+      }
     }
   }
 };

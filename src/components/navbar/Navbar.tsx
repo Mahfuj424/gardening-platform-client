@@ -60,7 +60,9 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
     };
     try {
       const res = await createPayment(paymentObject).unwrap();
+      if (typeof window !== undefined) {
       window.location.href = res?.data?.payment_url;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -145,8 +147,8 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
                 </div>
                 <div className="border-t border-gray-200 dark:border-gray-700" />
                 <ul className="py-2">
-                  {userInfo?.isVerified === true &&
-                  userInfo?.premiumAccess === true ? (
+                  {userInfo?.isVerified === false &&
+                  userInfo?.premiumAccess === false ? (
                     <li
                       className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
                       onClick={handlePayment}
@@ -159,7 +161,7 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
                   )}
                   <li
                     className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
-                    onClick={() => router.push(`/dashboard/${userInfo?.role}`)}
+                    onClick={() => router.push(`${userInfo?.role === 'user' ? '/dashboard' : 'admin-dashboard'}`)}
                   >
                     <MdOutlineDashboardCustomize className="inline mr-2" />
                     Dashboard

@@ -18,15 +18,15 @@ const UserDashboardLayout = ({ children }: LayoutProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
-    { name: "Posts", href: "/dashboard/user", icon: <BsFilePost /> },
+    { name: "Posts", href: "/dashboard", icon: <BsFilePost /> },
     {
       name: "Following",
-      href: "/dashboard/user/following",
+      href: "/dashboard/following",
       icon: <SlUserFollow />,
     },
     {
       name: "Followers",
-      href: "/dashboard/user/followers",
+      href: "/dashboard/followers",
       icon: <SlUserFollowing />,
     },
   ];

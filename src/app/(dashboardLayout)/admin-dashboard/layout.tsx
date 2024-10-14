@@ -16,9 +16,9 @@ const DashboardLayout = ({ children }: LayoutProps) => {
 
   // Define the menu items with their corresponding icons
   const menuItems = [
-    { name: 'Dashboard', href: '/dashboard/admin', icon: <FaTachometerAlt /> },
-    { name: 'Posts', href: '/dashboard/admin/posts', icon: <FaFileAlt /> },
-    { name: 'Users', href: '/dashboard/admin/users', icon: <FaUsers /> },
+    { name: 'Dashboard', href: '/admin-dashboard', icon: <FaTachometerAlt /> },
+    { name: 'Posts', href: '/admin-dashboard/posts', icon: <FaFileAlt /> },
+    { name: 'Users', href: '/admin-dashboard/users', icon: <FaUsers /> },
   ];
 
   const toggleSidebar = () => {

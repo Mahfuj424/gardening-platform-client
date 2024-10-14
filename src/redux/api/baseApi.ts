@@ -5,7 +5,9 @@ import { tagTypes, tagTypeList } from "../tagTypes"; // Adjust the path as neces
 // Define a service using a base URL and expected endpoints
 export const baseApi = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: `http://localhost:5000/api/v1` }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `https://gardening-tips-platform-server.vercel.app/api/v1`,
+  }),
   tagTypes: tagTypeList,
   endpoints: (builder) => ({
     // Renamed the endpoint to avoid conflicts
@@ -22,7 +24,9 @@ export const baseApi = createApi({
       providesTags: (result) =>
         result && Array.isArray(result) // Ensure result is an array
           ? [
-              ...result.map(({ id }: any) => ({ type: tagTypes.posts, id } as const)),
+              ...result.map(
+                ({ id }: any) => ({ type: tagTypes.posts, id } as const)
+              ),
               { type: tagTypes.posts, id: "LIST" },
             ]
           : [{ type: tagTypes.posts, id: "LIST" }],

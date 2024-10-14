@@ -1,7 +1,9 @@
 // pages/_app.tsx
-import DarkModeClient from "@/components/localstorageDeployFiles/DarkModeProvider";
+// import DarkModeClient from "@/components/localstorageDeployFiles/DarkModeProvider";
 import "./globals.css";
 import Providers from "@/lib/providers/Providers";
+import dynamic from "next/dynamic";
+const DarkModeClient = dynamic(()=> import('@/components/localstorageDeployFiles/DarkModeProvider'),{ssr:false})
 
 export default function RootLayout({
   children,

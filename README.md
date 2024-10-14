@@ -1,69 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gardening-Tips
+# https://gardening-tips-platform-client.vercel.app
 
-## Getting Started
+## Project Overview
 
-First, run the development server:
+The Gardening Tips & Advice Platform is a comprehensive web application designed for gardening enthusiasts and professionals. The platform allows users to share, discover, and interact with valuable gardening tips and knowledge. It provides insightful plant care advice, seasonal guides, and techniques to enhance gardening experiences. The frontend is built using **Next.js** and **TypeScript** to offer a responsive, interactive, and user-friendly experience across devices.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### User Authentication
+- **Login/Registration**: Users can securely sign up and log in with email and password using JWT-based authentication.
+- **Password Recovery**: Users can recover and reset their password.
+- **Profile Management**: Users can update their profile information, including profile picture and personal details.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Rich Text Editor for Post Creation
+- Users can create and edit posts using a rich text editor, with support for images and multimedia.
+- Posts can be categorized under topics such as Vegetables, Flowers, Landscaping, etc.
+- Users can tag posts as Premium content, accessible only to verified users.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Social Interaction
+- **Upvote/Downvote System**: Users can upvote or downvote posts, with sorting options based on the number of upvotes.
+- **Commenting**: Users can comment on posts and edit or delete their comments. Optionally, users can reply to comments.
+- **Following System**: Users can follow/unfollow other users and view posts from followed users.
 
-## Learn More
+### Premium Content & Payments
+- **Verified Profiles**: Users can verify their profiles once their post receives at least one upvote, and unlock access to premium content by paying through **Aamarpay**.
+- **Payment Integration**: Integration with **Aamarpay** for accessing exclusive content.
+- **Profile Badge**: Verified users receive a badge that is displayed on their profile.
 
-To learn more about Next.js, take a look at the following resources:
+### News Feed
+- A dynamic news feed displaying the latest gardening tips and guides.
+- Infinite scroll to load more posts dynamically.
+- Searching and filtering options to sort posts by category and upvotes.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Favorites Section
+- Users can mark posts as "Favourite" and access them in a dedicated section of their profile.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Animations and UI Enhancements
+- Micro animations such as hover effects and smooth transitions for improved user experience.
 
-## Deploy on Vercel
+### Image Gallery Section
+- An image gallery to showcase recent gardening images, enhancing visual engagement.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Search & Filter
+- Users can search for gardening tips or filter posts based on category or popularity.
+- Posts are sorted by upvote count when searching or filtering.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# gardening-platform-client
+### Responsive Design
+- The platform is designed to be fully responsive, ensuring a seamless experience on both mobile and desktop devices.
 
-# project structure-1
-app/
-  ├── api/
-  │   └── hello/
-  │       └── route.ts            # API endpoint (e.g., GET /api/hello)
-  ├── dashboard/
-  │   ├── layout.tsx              # Dashboard layout
-  │   ├── page.tsx                # Dashboard home (e.g., /dashboard)
-  │   └── user/
-  │       ├── followers/
-  │       │   └── page.tsx        # Followers list (e.g., /dashboard/user/followers)
-  │       └── page.tsx            # User profile (e.g., /dashboard/user)
-  ├── about/
-  │   └── page.tsx                # About p
+## Pages
+
+### Public Pages
+- **Home**: A landing page with gardening tips and a dynamic news feed.
+- **About Us**: Information about the platform and its mission.
+- **Contact Us**: A contact form for user inquiries and support.
+
+### Authenticated User Pages
+- **Dashboard**: A personalized user dashboard displaying posts from followed users and other relevant content.
+- **Profile Page**: Displays the user’s posts, followers, following, and a section for profile updates.
+- **Post Creation Modal**: A distraction-free modal for creating and editing posts.
+
+### Admin Pages
+- **Admin Dashboard**: A panel for administrators to manage users, posts, and payments, with charts for monthly activity.
 
 
-
-app/
-  ├── api/
-  │   └── hello/
-  │       └── route.ts            # API endpoint (TypeScript)
-  ├── dashboard/
-  │   ├── layout.tsx              # Dashboard layout (TypeScript)
-  │   ├── page.tsx                # Dashboard home (TypeScript)
-  │   └── user/
-  │       ├── followers/
-  │       │   └── page.tsx        # Followers list (TypeScript)
-  │       └── page.tsx            # User profile (TypeScript)
-  ├── about/
-  │   └── page.tsx                # About page (TypeScript)
-  ├── layout.tsx
+## Technologies Used
+- **Next.js**: For server-side rendering and frontend structure.
+- **TypeScript**: For type-safe JavaScript development.
+- **JWT Authentication**: For secure user authentication.
+- **Aamarpay/Stripe**: Payment integration for premium content access.
+- **Tailwind CSS**: For responsive UI design and styling.

@@ -32,12 +32,11 @@ const UserDashboardPosts: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState<string | null>(null);
   const userInfo = getUserInfo()
-  
   // Fetch posts data
   const { data, isLoading, error } = useGetSingleProfileQuery(userInfo?._id);
   const [deletePost] = useDeletePostMutation();
   const userData = data?.data;
-  const posts = userData?.posts
+  const posts = userData?.posts;
 
   const handleDeletePost = (id: string) => {
     setPostIdToDelete(id);
@@ -51,7 +50,7 @@ const UserDashboardPosts: React.FC = () => {
       const res = await deletePost(postIdToDelete).unwrap();
       toast.success(res?.message);
     } catch (error: any) {
-      toast.error(error?.message || "Error deleting post.");
+      toast.error(error?.message || 'Error deleting post.');
     } finally {
       setIsModalOpen(false);
       setPostIdToDelete(null);
@@ -89,7 +88,11 @@ const UserDashboardPosts: React.FC = () => {
                     {new Date(post?.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </td>
                   <td className="px-4 py-2 flex gap-2 items-center">
-                    <img src={post?.author?.profileImage} className="w-8 h-8 rounded-full" alt="author profile" />
+                    <img
+                      src={post?.author?.profileImage}
+                      className="w-8 h-8 rounded-full"
+                      alt="author profile"
+                    />
                     {post?.author?.name || 'Unknown Author'}
                   </td>
                   <td className="px-4 py-2 text-blue-500">

@@ -79,10 +79,12 @@ const RegisterForm = () => {
         if (result?.success) {
           toast.success("User login successfully");
           console.log(result);
-          localStorage.setItem(authKey, result?.token);
-          setAccessTokenToCookies(result?.token, {
-            redirect: "/",
-          });
+          if (typeof window !== undefined) {
+            localStorage.setItem(authKey, result?.token);
+            setAccessTokenToCookies(result?.token, {
+              redirect: "/",
+            });
+          }
         }
       } else {
         toast.error(res.message);
@@ -151,7 +153,10 @@ const RegisterForm = () => {
 
       {/* Password Input */}
       <div className="relative">
-        <label htmlFor="password" className="block text-sm font-medium text-white">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-white"
+        >
           Password
         </label>
         <input

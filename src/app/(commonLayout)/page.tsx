@@ -1,13 +1,14 @@
+// import HomePage from '@/components/HomePage/HomePage';
+import dynamic from 'next/dynamic';
 
-import HomePage from "@/components/HomePage/HomePage"; // Adjust path as necessary
+const HomePage = dynamic(()=> import('@/components/HomePage/HomePage'),{ssr:false})
 
-
-const Home=()=> {
-
+const Home: React.FC = () => {
   return (
     <div>
-     <HomePage/>
+      <HomePage/>
     </div>
   );
-}
-export default Home
+};
+
+export default Home;

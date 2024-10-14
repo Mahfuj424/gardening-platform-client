@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { getUserInfo } from "@/services/authServices";
 import Link from "next/link";
 
@@ -9,7 +9,6 @@ interface SidebarItem {
 }
 
 export default function LeftSidebar() {
-
   const sidebarItem: SidebarItem[] = [
     {
       title: "Home",
@@ -53,33 +52,33 @@ export default function LeftSidebar() {
     },
   ];
 
-
-  const userInfo= getUserInfo()
-
-
+ const userInfo = getUserInfo()
 
   return (
     <div>
-      <Link href={`/user/${userInfo?._id}`} className="flex items-center gap-3 mb-5">
-          <img
-            className="w-10 h-10 rounded-full ms-2"
-            src={userInfo?.profileImage}
-            alt="profile"
-          />
-          <h1 className="text-lg font-semibold dark:text-white">Profile</h1>
+      <Link
+        href={`/user/${userInfo?._id}`}
+        className="flex items-center gap-3 mb-5"
+      >
+        <img
+          className="w-10 h-10 rounded-full ms-2"
+          src={userInfo?.profileImage}
+          alt="profile"
+        />
+        <h1 className="text-lg font-semibold dark:text-white">Profile</h1>
+      </Link>
+      {sidebarItem.map((item, index) => (
+        <Link
+          href={`/${item?.route}`}
+          key={index}
+          className="flex items-center gap-4 my-2 rounded-md hover:duration-300 hover:bg-gray-200 dark:hover:bg-secondary p-3"
+        >
+          <div>
+            <img className="w-6 h-6" src={item.imageUrl} alt={item.title} />
+          </div>
+          <div className=" font-semibold dark:text-white">{item.title}</div>
         </Link>
-        {sidebarItem.map((item, index) => (
-          <Link
-            href={`/${item?.route}`}
-            key={index}
-            className="flex items-center gap-4 my-2 rounded-md hover:duration-300 hover:bg-gray-200 dark:hover:bg-secondary p-3"
-          >
-            <div>
-              <img className="w-6 h-6" src={item.imageUrl} alt={item.title} />
-            </div>
-            <div className=" font-semibold dark:text-white">{item.title}</div>
-          </Link>
-        ))}
+      ))}
     </div>
   );
 }
