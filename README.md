@@ -1,5 +1,6 @@
 # Gardening-Tips
-# https://gardening-tips-platform-client.vercel.app
+# Live Link: https://gardening-tips-platform-client.vercel.app
+![Gardening_Tips](https://i.ibb.co.com/6PdGrYD/Screenshot-2024-10-15-015656.png)
 
 ## Project Overview
 
