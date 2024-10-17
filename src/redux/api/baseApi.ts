@@ -6,7 +6,7 @@ import { tagTypes, tagTypeList } from "../tagTypes"; // Adjust the path as neces
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: `https://gardening-tips-platform-server.vercel.app/api/v1`,
+    baseUrl: `http://localhost:5000/api/v1`,
   }),
   tagTypes: tagTypeList,
   endpoints: (builder) => ({

@@ -16,6 +16,11 @@ export default function LeftSidebar() {
       route: "/",
     },
     {
+      title: "Frineds",
+      imageUrl: "https://i.ibb.co.com/WcyHH7R/support-4116212.png",
+      route: "/",
+    },
+    {
       title: "Message",
       imageUrl: "https://i.ibb.co/qm0qrnj/message.png",
       route: "/",
@@ -52,10 +57,10 @@ export default function LeftSidebar() {
     },
   ];
 
- const userInfo = getUserInfo()
+  const userInfo = getUserInfo();
 
   return (
-    <div>
+    <div className="">
       <Link
         href={`/user/${userInfo?._id}`}
         className="flex items-center gap-3 mb-5"

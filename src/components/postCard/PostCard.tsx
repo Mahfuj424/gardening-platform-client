@@ -181,8 +181,6 @@ const PostCard = ({ postData, isLoading }: any) => {
     }
   };
 
-
-
   return (
     <div>
       {isLoading ? (
@@ -195,10 +193,10 @@ const PostCard = ({ postData, isLoading }: any) => {
         postData?.map((item: any) => (
           <div
             key={item?._id}
-            className="dark:bg-darkCard w-[650px] bg-white shadow-md p-4 rounded-lg mt-4 relative"
+            className="dark:bg-darkCard md:rounded-md md:w-[620px] w-full bg-white shadow-md mt-4 relative"
           >
             {/* Post Header */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center p-4">
               <div
                 className="relative flex items-center space-x-3"
                 onMouseLeave={handleMouseLeave}
@@ -308,7 +306,7 @@ const PostCard = ({ postData, isLoading }: any) => {
             </div>
 
             {/* Post Content */}
-            <div className="mt-2">
+            <div className="mt-2 p-4">
               <div
                 className="mb-3 dark:text-white"
                 dangerouslySetInnerHTML={{
@@ -322,11 +320,16 @@ const PostCard = ({ postData, isLoading }: any) => {
             <div>
               {item?.images?.length > 0 &&
                 item?.images?.map((image: any) => (
-                  <Link key={image} href={userInfo?.isVerified ? `/post-details/${item?._id}` : '/'}>
+                  <Link
+                    key={image}
+                    href={
+                      userInfo?.isVerified ? `/post-details/${item?._id}` : "/"
+                    }
+                  >
                     <img
                       src={image}
                       alt="Post"
-                      className="w-full mt-3 rounded-lg"
+                      className="w-full mt-3 h-64 md:h-[330px]"
                     />
                   </Link>
                 ))}
@@ -369,12 +372,12 @@ const PostCard = ({ postData, isLoading }: any) => {
                 {item?.likes?.some(
                   (like: any) => like?.user?._id === userInfo?._id
                 ) ? (
-                  <BiSolidLike className={`text-2xl`} />
+                  <BiSolidLike className={`text-xl md:text-2xl`} />
                 ) : (
-                  <BiLike className={`text-2xl`} />
+                  <BiLike className={`text-xl md:text-2xl`} />
                 )}
 
-                <span className="font-bold">Like</span>
+                <span className="md:font-bold">Like</span>
               </div>
 
               <div
@@ -391,20 +394,20 @@ const PostCard = ({ postData, isLoading }: any) => {
                 {item?.dislikes?.some(
                   (like: any) => like?.user?._id === userInfo?._id
                 ) ? (
-                  <BiSolidDislike className={`text-2xl`} />
+                  <BiSolidDislike className={`text-xl md:text-2xl`} />
                 ) : (
-                  <BiDislike className="text-2xl" />
+                  <BiDislike className="text-xl md:text-2xl" />
                 )}
 
-                <span className="font-bold">Dislike</span>
+                <span className="md:font-bold">Dislike</span>
               </div>
               <div className="flex items-center gap-1 cursor-pointer">
-                <FaRegComment className="text-2xl" />
-                <span className="font-bold">Comment</span>
+                <FaRegComment className="text-xl md:text-2xl" />
+                <span className="md:font-bold">Comment</span>
               </div>
               <div className="flex items-center gap-1 cursor-pointer">
-                <PiShareFatLight className="text-2xl" />
-                <span className="font-bold">Share</span>
+                <PiShareFatLight className="text-xl md:text-2xl" />
+                <span className="md:font-bold">Share</span>
               </div>
             </div>
 

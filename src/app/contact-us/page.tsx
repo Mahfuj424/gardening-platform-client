@@ -21,7 +21,7 @@ const ContactUs = () => {
           <div className="grid md:grid-cols-3 gap-6">
             {/* Location */}
             <div className="flex flex-col items-center bg-white dark:text-gray-300 dark:bg-darkCard shadow-md p-6 rounded-md">
-              <FaMapMarkerAlt className="text-4xl text-blue-500 mb-3" />
+              <FaMapMarkerAlt className="text-4xl text-green-500 mb-3" />
               <h3 className="font-bold">Our Location</h3>
               <p className="text-center text-secondary dark:text-gray-300">
                 Jl. Cempaka Wangi No 22, Jakarta - Indonesia
@@ -30,7 +30,7 @@ const ContactUs = () => {
 
             {/* Phone */}
             <div className="flex flex-col items-center bg-white dark:bg-darkCard dark:text-gray-300 shadow-md p-6 rounded-md">
-              <FaPhoneAlt className="text-4xl text-blue-500 mb-3" />
+              <FaPhoneAlt className="text-4xl text-green-500 mb-3" />
               <h3 className="font-bold">Our Phone</h3>
               <p className="text-center text-secondary dark:text-gray-300">
                 +6221.2002.2012
@@ -42,7 +42,7 @@ const ContactUs = () => {
 
             {/* Mail */}
             <div className="flex flex-col items-center bg-white dark:bg-darkCard dark:text-gray-300 shadow-md p-6 rounded-md">
-              <FaEnvelope className="text-4xl text-blue-500 mb-3" />
+              <FaEnvelope className="text-4xl text-green-500 mb-3" />
               <h3 className="font-bold">Mail Address</h3>
               <p className="text-center text-secondary dark:text-gray-300">
                 support@yourdomain.tld
@@ -103,7 +103,7 @@ const ContactUs = () => {
               ></textarea>
               <button
                 type="submit"
-                className="w-full bg-blue-500 text-white font-bold py-3 rounded-md hover:bg-blue-500"
+                className="w-full bg-custom-gradient text-white font-bold py-3 rounded-md hover:bg-green-500"
               >
                 SEND MY MESSAGE
               </button>

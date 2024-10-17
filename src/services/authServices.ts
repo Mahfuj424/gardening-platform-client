@@ -9,7 +9,6 @@ export const storeUserInfo = (accessToken: string) => {
 };
 
 export const getUserInfo = () => {
-  if (typeof window !== undefined) {
     const authToken = localStorage.getItem(authKey);
     if (authToken) {
       const decodedInfo: any = jwtDecode(authToken);
@@ -17,7 +16,6 @@ export const getUserInfo = () => {
         ...decodedInfo
       }
     }
-  }
 };
 
 export const isLoggedIn = () => {

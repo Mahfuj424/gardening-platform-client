@@ -81,7 +81,7 @@ const PostComment: React.FC<PostCommentProps> = ({
       commentText,
       commentImage,
     };
-    
+
     const res = await createComment({
       commentObject,
       postId: item?._id,
@@ -173,7 +173,7 @@ const PostComment: React.FC<PostCommentProps> = ({
             ? item?.comments?.map((comment: any) => (
                 <div key={comment?._id}>
                   <div>
-                    <div className="flex items-center gap-3 ms-3 my-3 relative">
+                    <div className="flex items-center gap-3 ms-3 my-3 px-4 relative">
                       <img
                         onMouseEnter={() =>
                           handleMouseEnterComment(comment?.author?._id)
@@ -181,16 +181,16 @@ const PostComment: React.FC<PostCommentProps> = ({
                         onMouseLeave={handleMouseLeaveComment}
                         src={comment?.author?.profileImage}
                         alt="User Avatar"
-                        className="w-8 h-8 rounded-full"
+                        className="md:w-8 w-6 h-6 md:h-8 rounded-full"
                       />
                       <div className="flex gap-2 items-center relative">
-                        <div className="dark:bg-darkModal bg-gray-100 p-3 rounded-xl text-gray-400 font-semibold dark:text-white">
+                        <div className="dark:bg-darkModal bg-gray-100 p-1 md:p-3 rounded-xl text-gray-400 md:font-semibold dark:text-white">
                           <h1
                             onMouseEnter={() =>
                               handleMouseEnterComment(comment?.author?._id)
                             }
                             onMouseLeave={handleMouseLeaveComment}
-                            className="font-bold text-black dark:text-gray-100 cursor-pointer relative"
+                            className="md:font-bold font-medium text-black dark:text-gray-100 cursor-pointer relative"
                           >
                             {comment?.author?.name}
                           </h1>
@@ -269,7 +269,7 @@ const PostComment: React.FC<PostCommentProps> = ({
             : item?.comments?.slice(0, 1).map((comment: any) => (
                 <div key={comment?._id}>
                   <div>
-                    <div className="flex items-center gap-3 ms-3 my-3 relative">
+                    <div className="flex items-center gap-3 px-4 ms-3 my-3 relative">
                       <img
                         onMouseEnter={() =>
                           handleMouseEnterComment(comment?.author?._id)
@@ -286,7 +286,7 @@ const PostComment: React.FC<PostCommentProps> = ({
                               handleMouseEnterComment(comment?.author?._id)
                             }
                             onMouseLeave={handleMouseLeaveComment}
-                            className="font-bold text-black dark:text-gray-100 cursor-pointer relative"
+                            className="font-bold text-black dark:text-gray-200 cursor-pointer relative"
                           >
                             {comment?.author?.name}
                           </h1>
@@ -363,11 +363,11 @@ const PostComment: React.FC<PostCommentProps> = ({
                 </div>
               )))}
 
-        <div className="flex items-center mt-4 gap-3 relative">
+        <div className="flex items-center p-4 mt-4 gap-3 relative">
           <img
             src={userInfo?.profileImage}
             alt="User Avatar"
-            className="w-10 h-10 rounded-full"
+            className="md:w-10 w-8 md:h-10 w-8 rounded-full"
           />
           <div className="flex-grow relative">
             <input

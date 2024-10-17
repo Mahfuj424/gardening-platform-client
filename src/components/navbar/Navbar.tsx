@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   MdOutlineContactPage,
@@ -6,6 +6,7 @@ import {
   MdOutlineNotificationsActive,
   MdOutlineWorkspacePremium,
 } from "react-icons/md";
+import { IoIosImages } from "react-icons/io";
 import { TiWeatherSunny } from "react-icons/ti";
 import { BsMoonStarsFill } from "react-icons/bs";
 import { logoutUser } from "@/services/actions/logoutUser";
@@ -14,8 +15,9 @@ import { LuLogOut } from "react-icons/lu";
 import { RiContactsBook3Line, RiMessengerLine } from "react-icons/ri";
 import Link from "next/link";
 import { useCreatePaymentMutation } from "@/redux/api/paymentApi";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useGetSingleProfileQuery } from "@/redux/api/userApi";
 
 interface NavBarProps {
   darkMode: boolean;
@@ -23,6 +25,7 @@ interface NavBarProps {
 }
 
 interface UserInfo {
+  _id: string;
   profileImage?: string;
   name?: string;
   email?: string;
@@ -35,16 +38,10 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
   const router = useRouter();
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      const info = await getUserInfo();
-      setUserInfo(info);
-    };
-
-    fetchUserInfo();
-  }, []);
+  const user: UserInfo = getUserInfo();
+  const { data } = useGetSingleProfileQuery(user?._id);
+  const userInfo = data?.data;
+  console.log("user information=>", userInfo);
 
   const handleLogout = () => {
     logoutUser(router);
@@ -61,7 +58,7 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
     try {
       const res = await createPayment(paymentObject).unwrap();
       if (typeof window !== undefined) {
-      window.location.href = res?.data?.payment_url;
+        window.location.href = res?.data?.payment_url;
       }
     } catch (error) {
       console.log(error);
@@ -71,7 +68,10 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
   return (
     <nav className="fixed top-0 left-0 w-full bg-white dark:bg-darkCard shadow-md z-50">
       <div className="flex items-center justify-between px-6 py-4">
-        <div className="cursor-pointer flex" onClick={() => router.push("/")}>
+        <div
+          className="cursor-pointer flex -ms-3"
+          onClick={() => router.push("/")}
+        >
           <img
             src="https://i.ibb.co/M5VKXRn/garden-Logo-removebg-preview.png"
             alt="GrowNest Logo"
@@ -90,6 +90,10 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
           <Link href={`/about-us`} className="flex items-center">
             <MdOutlineContactPage className="text-2xl" />
             <h1>About</h1>
+          </Link>
+          <Link href={`/gallery`} className="flex items-center gap-1">
+            <IoIosImages className="text-2xl" />
+            <h1>Gallery</h1>
           </Link>
         </div>
 
@@ -147,8 +151,9 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
                 </div>
                 <div className="border-t border-gray-200 dark:border-gray-700" />
                 <ul className="py-2">
-                  {userInfo?.isVerified === false &&
-                  userInfo?.premiumAccess === false ? (
+                  {userInfo?.isVerified ? (
+                    ""
+                  ) : (
                     <li
                       className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
                       onClick={handlePayment}
@@ -156,12 +161,18 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
                       <MdOutlineWorkspacePremium className="inline mr-2" />
                       upgrade to premium
                     </li>
-                  ) : (
-                    ""
                   )}
                   <li
                     className="px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer"
-                    onClick={() => router.push(`${userInfo?.role === 'user' ? '/dashboard' : 'admin-dashboard'}`)}
+                    onClick={() =>
+                      router.push(
+                        `${
+                          userInfo?.role === "user"
+                            ? "/dashboard"
+                            : "admin-dashboard"
+                        }`
+                      )
+                    }
                   >
                     <MdOutlineDashboardCustomize className="inline mr-2" />
                     Dashboard

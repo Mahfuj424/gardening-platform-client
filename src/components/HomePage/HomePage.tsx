@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useState } from "react";
 import WhatsOnYourMind from "../post/WhatsOnYourMind";
 import PostCard from "../postCard/PostCard";
@@ -12,10 +12,7 @@ const HomePage = () => {
   const [selectedFilter, setSelectedFilter] = useState("");
 
   // Call the API with the search query and selected filter as params
-  const {
-    data: posts,
-    isLoading,
-  } = useGetAllPostsQuery({
+  const { data: posts, isLoading } = useGetAllPostsQuery({
     search: searchQuery,
     filter: selectedFilter,
   });
@@ -30,10 +27,10 @@ const HomePage = () => {
   };
 
   return (
-    <div className="flex justify-around w-full px-5">
+    <div className="flex justify-around w-full">
       {/* Left content area */}
       <div>
-        <div className="w-full">
+        <div className="w-full dark:bg-darkBg bg-gray-100">
           {/* Pass search and filter handling to SearchBar as props */}
           <SearchBar onSearch={handleSearch} onFilter={handleFilter} />
         </div>
@@ -46,7 +43,7 @@ const HomePage = () => {
       </div>
 
       {/* Fixed Right Sidebar */}
-      <div className="w-72">
+      <div className="w-72 hidden md:block">
         <div className="fixed top-16 pt-2 right-3 h-screen">
           <RightSidebar />
         </div>
