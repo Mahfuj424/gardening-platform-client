@@ -138,7 +138,7 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
               <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-darkModal rounded-lg shadow-lg z-50">
                 <div className="flex items-center px-4 py-3">
                   <img
-                    src={userInfo?.profileImage}
+                    src={user?.profileImage}
                     alt={"Profile"}
                     className="w-10 h-10 rounded-full"
                   />

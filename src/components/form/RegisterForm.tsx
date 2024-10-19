@@ -17,6 +17,7 @@ interface FormData {
   name: string;
   email: string;
   password: string;
+  gander: string;
 }
 
 const RegisterForm = () => {
@@ -38,7 +39,6 @@ const RegisterForm = () => {
     formData.append("image", imageFile);
 
     const apiKey = "2167989ee53b7a504211edcff02ebe5b";
-    console.log(apiKey);
 
     try {
       const response = await axios.post(
@@ -56,19 +56,20 @@ const RegisterForm = () => {
   const onSubmit = async (data: FormData) => {
     setImageUploading(true);
 
-    // Upload the image and get the URL
-    const uploadedImageUrl = await uploadImage(data.image[0]);
+    // Check if the image is provided
+    let uploadedImageUrl = null;
+    if (data.image && data.image.length > 0) {
+      uploadedImageUrl = await uploadImage(data.image[0]);
+    }
 
-    if (uploadedImageUrl) {
-      // Destructure 'image' out of 'data' to exclude it
+    // If image upload failed or no image is provided, proceed with form submission
+    if (uploadedImageUrl || !data.image || data.image.length === 0) {
       const { image, ...restOfData } = data;
-
       const formDataWithImage = {
-        ...restOfData, // Spread the rest of the data without the 'image' field
-        profileImage: uploadedImageUrl, // Add the uploaded image URL to the form data
+        ...restOfData,
+        ...(uploadedImageUrl && { profileImage: uploadedImageUrl }), // Add image URL only if it exists
       };
 
-      console.log(formDataWithImage);
       const res = await registerUser(formDataWithImage);
 
       if (res?.success) {
@@ -78,8 +79,7 @@ const RegisterForm = () => {
         });
         if (result?.success) {
           toast.success("User login successfully");
-          console.log(result);
-          if (typeof window !== undefined) {
+          if (typeof window !== "undefined") {
             localStorage.setItem(authKey, result?.token);
             setAccessTokenToCookies(result?.token, {
               redirect: "/",
@@ -101,20 +101,50 @@ const RegisterForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {/* Image Upload */}
-      <div>
-        <label htmlFor="image" className="block text-sm font-medium text-white">
-          Upload Profile
-        </label>
-        <input
-          id="image"
-          type="file"
-          accept="image/*"
-          {...register("image", { required: true })}
-          className="w-full mt-2 p-3 bg-transparent border border-gray-500 rounded-md text-white placeholder-gray-400 focus:border-custom-green focus:ring-custom-green"
-        />
-        {errors.image && (
-          <p className="text-red-500 text-sm mt-1">Image is required</p>
-        )}
+      <div className="flex flex-col md:flex-row items-center gap-4">
+        <div className="w-full md:w-1/2">
+          <label
+            htmlFor="image"
+            className="block text-sm font-medium text-white"
+          >
+            Upload Profile
+          </label>
+          <input
+            id="image"
+            type="file"
+            accept="image/*"
+            {...register("image")}
+            className="w-full mt-2 p-3 bg-transparent border border-gray-500 rounded-md text-white placeholder-gray-400 focus:border-custom-green focus:ring-custom-green"
+          />
+        </div>
+
+        {/* Gender Dropdown */}
+        <div className="w-full md:w-1/2">
+          <label
+            htmlFor="gender"
+            className="block text-sm font-medium text-white"
+          >
+            Gender
+          </label>
+          <select
+            id="gender"
+            {...register("gander", { required: true })}
+            className="w-full mt-2 p-3 bg-transparent border border-gray-500 rounded-md text-white placeholder-gray-400 focus:border-custom-green focus:ring-custom-green"
+          >
+            <option value="" disabled>
+              Select Gender
+            </option>
+            <option className="text-black hover:text-white" value="male">
+              Male
+            </option>
+            <option className="text-black hover:text-white" value="female">
+              Female
+            </option>
+          </select>
+          {errors.gander && (
+            <p className="text-red-500 text-sm mt-1">Gender is required</p>
+          )}
+        </div>
       </div>
 
       {/* Name Input */}

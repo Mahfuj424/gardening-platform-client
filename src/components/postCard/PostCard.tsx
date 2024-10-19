@@ -8,7 +8,6 @@ import UserModal from "../modal/UserModal";
 import { BiDislike, BiLike, BiSolidDislike, BiSolidLike } from "react-icons/bi";
 import { FaFilePdf, FaRegComment } from "react-icons/fa";
 import { HiDotsHorizontal } from "react-icons/hi";
-import { PiShareFatLight } from "react-icons/pi";
 import DOMPurify from "dompurify"; // For sanitization
 import { RiDeleteBin5Fill, RiVerifiedBadgeFill } from "react-icons/ri";
 import PostSkeleton from "../loading/PostSkeleton";
@@ -24,6 +23,7 @@ import ConfirmationModal from "../modal/ConfirmationModal";
 import { useFollowUserMutation } from "@/redux/api/userApi";
 import Link from "next/link";
 import TruncatedContent from "../TruncatedContent/TruncatedContent";
+import ShareButton from "./ShareButton";
 
 const PostCard = ({ postData, isLoading }: any) => {
   const [hoveredPost, setHoveredPost] = useState<string | null>(null); // For posts
@@ -405,10 +405,10 @@ const PostCard = ({ postData, isLoading }: any) => {
                 <FaRegComment className="text-xl md:text-2xl" />
                 <span className="md:font-bold">Comment</span>
               </div>
-              <div className="flex items-center gap-1 cursor-pointer">
-                <PiShareFatLight className="text-xl md:text-2xl" />
-                <span className="md:font-bold">Share</span>
-              </div>
+              <ShareButton
+                postTitle={item?.title}
+                postDescription={item?.content}
+              />
             </div>
 
             {/* Post Comments */}
