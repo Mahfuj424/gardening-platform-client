@@ -211,7 +211,7 @@ const PostCard = ({ postData, isLoading }: any) => {
                 <div>
                   <p className="dark:text-white flex items-center gap-2 text-black font-semibold">
                     <Link
-                      href={`/user/${item?.author?._id}`}
+                      href={`/userDetails/${item?.author?._id}`}
                       onMouseEnter={() => handleMouseEnter(item?._id)}
                       className="cursor-pointer hover:underline"
                     >

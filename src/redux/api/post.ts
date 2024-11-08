@@ -36,6 +36,7 @@ const postsApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.posts],
     }),
+
     getSinglePost: build.query({
       query: (postId) => ({
         url: `/post/post/${postId}`,
@@ -43,6 +44,7 @@ const postsApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.posts],
     }),
+
     updatePost: build.mutation({
       query: ({ updateData, postId }) => {
         // console.log({ updateData, postId });

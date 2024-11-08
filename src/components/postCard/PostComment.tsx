@@ -159,14 +159,16 @@ const PostComment: React.FC<PostCommentProps> = ({
     <div>
       <div className="mt-3">
         {/* Conditionally render "See All Comments" */}
-        {item?.comments?.length > 1 && (
-          <h1
-            className="text-xs cursor-pointer dark:text-gray-100"
-            onClick={() => setShowAllComments((prev) => !prev)}
-          >
-            {showAllComments ? "Hide Comments" : "view more Comments"}
-          </h1>
-        )}
+        <div className="ps-3">
+          {item?.comments?.length > 1 && (
+            <h1
+              className="text-xs cursor-pointer dark:text-gray-100"
+              onClick={() => setShowAllComments((prev) => !prev)}
+            >
+              {showAllComments ? "Hide Comments" : "view more Comments"}
+            </h1>
+          )}
+        </div>
 
         {item?.comments?.length > 0 &&
           (showAllComments

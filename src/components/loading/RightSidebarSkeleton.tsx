@@ -7,7 +7,7 @@ const RightSidebarSkeleton = () => {
       <div className="h-5 bg-gray-300 dark:bg-gray-600 rounded-md w-40 mb-4" />
 
       {/* Loop to mimic user suggestions */}
-      {Array(7)
+      {Array(10)
         .fill(0)
         .map((_, index) => (
           <div key={index} className="flex justify-between items-center mb-4">

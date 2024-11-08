@@ -62,7 +62,7 @@ export default function LeftSidebar() {
   return (
     <div className="">
       <Link
-        href={`/user/${userInfo?._id}`}
+        href={`/userDetails/${userInfo?._id}`}
         className="flex items-center gap-3 mb-5"
       >
         <img

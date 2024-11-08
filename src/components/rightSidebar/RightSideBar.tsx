@@ -38,6 +38,7 @@ const RightSidebar = () => {
             </h2>
             {people
               ?.filter((person: any) => person?._id !== userInfo?._id) // Filter out the current user
+              .slice(0, 10)
               .map((person: any) => (
                 <div
                   key={person?._id}
@@ -82,6 +83,9 @@ const RightSidebar = () => {
                   </div>
                 </div>
               ))}
+            <div className="text-black dark:text-white hover:text-blue-500 cursor-pointer duration-300 transition-all">
+              see more...
+            </div>
           </div>
         </div>
       )}

@@ -27,9 +27,7 @@ import PostComment from "../postCard/PostComment";
 import CreatePostModal from "../modal/CreatePostModal";
 import TruncatedContent from "../TruncatedContent/TruncatedContent";
 
-
-const SinglePost = ({user, isLoading}:any) => {
-
+const SinglePost = ({ user, isLoading }: any) => {
   const [hoveredPost, setHoveredPost] = useState<string | null>(null); // For posts
   const [hoveredComment, setHoveredComment] = useState<string | null>(null); // For comments
   const [modalOpen, setModalOpen] = useState<string | null>(null); // Modal for options
@@ -193,7 +191,7 @@ const SinglePost = ({user, isLoading}:any) => {
         postData?.map((item: any) => (
           <div
             key={item?._id}
-            className="dark:bg-darkCard w-[400px] bg-white shadow-md p-4 rounded-lg mt-4 relative"
+            className="dark:bg-darkCard w-[600px] bg-white shadow-md p-4 rounded-lg mt-4 relative"
           >
             {/* Post Header */}
             <div className="flex justify-between items-center">
@@ -210,7 +208,8 @@ const SinglePost = ({user, isLoading}:any) => {
                 />
                 <div>
                   <p className="dark:text-white flex items-center gap-2 text-black font-semibold">
-                    <Link href={`/user/${item?.author?._id}`}
+                    <Link
+                      href={`/user/${item?.author?._id}`}
                       onMouseEnter={() => handleMouseEnter(item?._id)}
                       className="cursor-pointer hover:underline"
                     >
@@ -234,9 +233,7 @@ const SinglePost = ({user, isLoading}:any) => {
                       )}
                     </div>
                   </p>
-                  <p className="text-xs text-gray-400">
-                    1h ago
-                  </p>
+                  <p className="text-xs text-gray-400">1h ago</p>
                 </div>
 
                 {/* Show User Modal for the specific post */}
@@ -312,7 +309,7 @@ const SinglePost = ({user, isLoading}:any) => {
                   __html: DOMPurify.sanitize(item?.title),
                 }}
               />
-              <TruncatedContent item={item}/>
+              <TruncatedContent item={item} />
             </div>
 
             {/* Post Image */}
