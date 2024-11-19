@@ -1,5 +1,8 @@
+"use client";
 import LeftSidebar from "@/components/leftSidebar/LeftSidebar";
-import React, { ReactNode } from "react";
+import { getUserInfo } from "@/services/authServices";
+import { useRouter } from "next/navigation";
+import React, { ReactNode, useEffect } from "react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -8,6 +11,15 @@ interface CommonLayoutProps {
 }
 
 const CommonLayout: React.FC<CommonLayoutProps> = ({ children }) => {
+  const router = useRouter();
+  const userInfo = getUserInfo();
+
+  useEffect(() => {
+    if (!userInfo) {
+      router.push("/auth/login");
+    }
+  }, [userInfo, router]);
+
   return (
     <div className="md:flex justify-between mt-[70px] dark:bg-darkBg bg-gray-100">
       {/* Left Sidebar */}

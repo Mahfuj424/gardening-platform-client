@@ -220,7 +220,7 @@ const RegisterForm = () => {
       </button>
 
       {/* Social Login */}
-      <div className="flex justify-center space-x-4 mt-4">
+      {/* <div className="flex justify-center space-x-4 mt-4">
         <button
           type="button"
           className="flex items-center justify-center p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
@@ -233,7 +233,7 @@ const RegisterForm = () => {
         >
           <FaGoogle className="w-5 h-5" />
         </button>
-      </div>
+      </div> */}
 
       {/* Signup Link */}
       <p className="text-center text-white mt-4">

@@ -3,13 +3,13 @@ import { useFollowUserMutation } from "@/redux/api/userApi";
 import Link from "next/link";
 import React from "react";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
-import { SiMessenger } from "react-icons/si";
+// import { SiMessenger } from "react-icons/si";
 import { toast } from "sonner";
 
 // Define proper types for followers and the user object
 interface User {
   following: any;
-  followers: string[];  // Assuming followers is an array of strings (IDs)
+  followers: string[]; // Assuming followers is an array of strings (IDs)
   _id: string;
   name: string;
   isVerified: boolean;
@@ -50,7 +50,9 @@ const UserModal: React.FC<UserModalProps> = ({ user, currentUser }) => {
         <div>
           <p className="dark:text-white flex gap-1 items-center text-black font-semibold">
             {user?.name}
-            {user?.isVerified && <RiVerifiedBadgeFill className="text-blue-500" />}
+            {user?.isVerified && (
+              <RiVerifiedBadgeFill className="text-blue-500" />
+            )}
           </p>
           {user?.email && (
             <p className="text-sm text-gray-400">{user?.email}</p>
@@ -58,10 +60,10 @@ const UserModal: React.FC<UserModalProps> = ({ user, currentUser }) => {
         </div>
       </div>
       <div className="flex justify-between mt-4">
-        <div className="bg-custom-gradient cursor-pointer py-1 rounded-md px-3 flex gap-1 items-center">
+        {/* <div className="bg-custom-gradient cursor-pointer py-1 rounded-md px-3 flex gap-1 items-center">
           <SiMessenger className="text-white" />
           <h1 className="font-semibold text-white">Message</h1>
-        </div>
+        </div> */}
         <div>
           {user?._id !== currentUser && (
             <div
@@ -73,7 +75,7 @@ const UserModal: React.FC<UserModalProps> = ({ user, currentUser }) => {
                   Following
                 </button>
               ) : (
-                <button className="bg-custom-gradient px-4 py-2 rounded-md text-white font-semibold" >
+                <button className="bg-custom-gradient px-4 py-2 rounded-md text-white font-semibold">
                   Follow
                 </button>
               )}
@@ -92,7 +94,12 @@ const UserModal: React.FC<UserModalProps> = ({ user, currentUser }) => {
         </div>
       </div>
       <div>
-        <Link href={`/user/${user?._id}`} className="text-blue-500 cursor-pointer text-sm mt-2">See All Posts</Link>
+        <Link
+          href={`/userDetails/${user?._id}`}
+          className="text-blue-500 cursor-pointer text-sm mt-2"
+        >
+          See All Posts
+        </Link>
       </div>
     </div>
   );

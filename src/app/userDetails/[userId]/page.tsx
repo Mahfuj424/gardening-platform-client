@@ -16,14 +16,18 @@ const SingleUserPage = ({ params }: any) => {
   if (error) return <div>Error loading user profile</div>;
 
   return (
-    <div className="gap-5 h-full dark:bg-darkBg">
+    <div
+      className={`gap-5 ${
+        user?.posts.length === 0 ? "h-screen" : "h-full"
+      }  dark:bg-darkBg bg-gray-100 pb-28`}
+    >
       <div className="pt-[88px] max-w-6xl mx-auto">
         {/* Apply fixed positioning with Tailwind classes */}
         <div className="w-full">
           <BannerWithProfile user={user} userInfo={userInfo} />
         </div>
         <div className="flex justify-between">
-          <div>other text</div>
+          <div></div>
           <SinglePost user={user} isLoading={isLoading} />
         </div>
       </div>

@@ -24,32 +24,32 @@ const AdminDashboardPage = () => {
         <DisLikeCount />
       </div> */}
 
-      <div className="p-6 space-y-6 bg-darkBg text-white">
+      <div className="p-6 space-y-6 dark:bg-darkBg bg-gray-100 text-white">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-darkModal p-4 rounded-lg shadow">
+          <div className="dark:bg-darkModal bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-4">User Verification</h2>
             <UserVerificationChart />
           </div>
-          <div className="bg-darkModal p-4 rounded-lg shadow">
+          <div className="dark:bg-darkModal bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-4">Post Types</h2>
             <PostTypesChart />
           </div>
-          <div className="bg-darkModal p-4 rounded-lg shadow">
+          <div className="dark:bg-darkModal bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-4">Payment Status</h2>
             <PaymentStatusChart />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-darkModal p-4 rounded-lg shadow">
+          <div className="dark:bg-darkModal bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-4">User Activity</h2>
             <UserActivityChart />
           </div>
-          <div className="bg-darkModal p-4 rounded-lg shadow">
+          <div className="dark:bg-darkModal bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-4">Top 5 Engaging Posts</h2>
             <TopPostsChart />
           </div>
         </div>
-        <div className="bg-darkModal p-4 rounded-lg shadow">
+        <div className="dark:bg-darkModal bg-white p-4 rounded-lg shadow">
           <h2 className="text-lg font-semibold mb-4">Revenue Overview</h2>
           <RevenueChart />
         </div>

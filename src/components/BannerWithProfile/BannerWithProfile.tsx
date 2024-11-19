@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { FaUserFriends, FaEdit } from "react-icons/fa";
-import { RiMessage3Fill } from "react-icons/ri";
+// import { RiMessage3Fill } from "react-icons/ri";
 import { useFollowUserMutation } from "@/redux/api/userApi";
 import { toast } from "sonner";
 import UpdateProfileModal from "../modal/UpdateProfileModal";
@@ -140,10 +140,10 @@ function ActionButtons({
               ? "Following"
               : "Follow"}
           </button>
-          <button className="flex items-center gap-2 rounded-md bg-custom-gradient px-4 py-2 text-sm font-medium text-white ">
+          {/* <button className="flex items-center gap-2 rounded-md bg-custom-gradient px-4 py-2 text-sm font-medium text-white ">
             <RiMessage3Fill className="h-4 w-4" />
             Message
-          </button>
+          </button> */}
         </>
       )}
     </div>

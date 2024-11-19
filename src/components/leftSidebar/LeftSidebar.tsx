@@ -18,38 +18,38 @@ export default function LeftSidebar() {
     {
       title: "Frineds",
       imageUrl: "https://i.ibb.co.com/WcyHH7R/support-4116212.png",
-      route: "/",
+      route: "friends",
+    },
+    // {
+    //   title: "Message",
+    //   imageUrl: "https://i.ibb.co/qm0qrnj/message.png",
+    //   route: "/",
+    // },
+    {
+      title: "Contact",
+      imageUrl: "https://i.ibb.co.com/VQJZXhV/chat.png",
+      route: "contact-us",
     },
     {
-      title: "Message",
-      imageUrl: "https://i.ibb.co/qm0qrnj/message.png",
-      route: "/",
+      title: "About",
+      imageUrl: "https://i.ibb.co.com/72Pnsjh/info.png",
+      route: "about-us",
     },
     {
-      title: "Video",
-      imageUrl: "https://i.ibb.co/37cK4t8/video.png",
-      route: "/",
+      title: "Gallery",
+      imageUrl: "https://i.ibb.co.com/L9FB4rT/picture.png",
+      route: "gallery",
     },
-    {
-      title: "Event",
-      imageUrl: "https://i.ibb.co/S774Y82/event-2.png",
-      route: "/",
-    },
-    {
-      title: "Pages",
-      imageUrl: "https://i.ibb.co/NmYLtgc/page.png",
-      route: "/",
-    },
-    {
-      title: "Group",
-      imageUrl: "https://i.ibb.co/XCQhKGQ/group.png",
-      route: "/",
-    },
-    {
-      title: "Market",
-      imageUrl: "https://i.ibb.co/SmmrTWp/market.png",
-      route: "/",
-    },
+    // {
+    //   title: "Group",
+    //   imageUrl: "https://i.ibb.co/XCQhKGQ/group.png",
+    //   route: "/",
+    // },
+    // {
+    //   title: "Market",
+    //   imageUrl: "https://i.ibb.co/SmmrTWp/market.png",
+    //   route: "/",
+    // },
     {
       title: "Blog",
       imageUrl: "https://i.ibb.co/jwq7dGD/blog.png",

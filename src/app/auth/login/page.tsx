@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useState } from "react";
-import { FaEye, FaEyeSlash, FaGoogle, FaFacebookF } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { loginUser } from "@/services/actions/loginUser";
@@ -19,10 +19,11 @@ const LoginPage = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-  const [modalEmail, setModalEmail] = useState(''); // State to capture email in modal
+  const [modalEmail, setModalEmail] = useState(""); // State to capture email in modal
   const {
     register,
     handleSubmit,
+    setValue, // Add setValue for setting form values
     formState: { errors },
   } = useForm<FormData>();
 
@@ -53,7 +54,7 @@ const LoginPage = () => {
       toast.error(error.message);
     }
   };
- 
+
   // Handle forgot password submission
   const [forgotPassowrd] = useForgotPassowrdMutation();
 
@@ -62,11 +63,30 @@ const LoginPage = () => {
       toast.error("Please enter a valid email.");
       return;
     }
-    
+
     const res = await forgotPassowrd({ email: modalEmail }).unwrap();
     console.log(res);
-    toast.success("Password reset link sent to your email.!!  reset password into 10 min");
+    toast.success(
+      "Password reset link sent to your email.!!  reset password into 10 min"
+    );
     toggleModal(); // Close modal after submitting
+  };
+
+  // Predefined credentials
+  const userCredentials = {
+    email: "mahfujahmad44@gmail.com",
+    password: "123456",
+  };
+  const adminCredentials = {
+    email: "mahfujahmad424@gmail.com",
+    password: "12345678",
+  };
+
+  // Populate form with credentials
+  const handleCredentialClick = (type: "user" | "admin") => {
+    const credentials = type === "user" ? userCredentials : adminCredentials;
+    setValue("email", credentials.email);
+    setValue("password", credentials.password);
   };
 
   return (
@@ -155,18 +175,21 @@ const LoginPage = () => {
           </button>
 
           {/* Social Login */}
-          <div className="flex justify-center space-x-4 mt-4">
+          <div className="text-white text-center">Credentials</div>
+          <div className="flex justify-center items-center space-x-4 mt-4">
             <button
               type="button"
-              className="flex items-center justify-center p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+              onClick={() => handleCredentialClick("user")}
+              className="px-5 py-1 bg-custom-gradient rounded-full text-white"
             >
-              <FaFacebookF className="w-5 h-5" />
+              user
             </button>
             <button
               type="button"
-              className="flex items-center justify-center p-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
+              onClick={() => handleCredentialClick("admin")}
+              className="px-5 py-1 bg-custom-gradient rounded-full text-white"
             >
-              <FaGoogle className="w-5 h-5" />
+              admin
             </button>
           </div>
 

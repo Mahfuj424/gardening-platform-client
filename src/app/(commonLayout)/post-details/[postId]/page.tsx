@@ -11,7 +11,6 @@ interface PostDetailsProps {
   };
 }
 
-
 const PostDetails: React.FC<PostDetailsProps> = ({ params }) => {
   // Fetch single post using postId from params
   const { data, isLoading } = useGetSinglePostQuery(params?.postId);
@@ -19,7 +18,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ params }) => {
 
   return (
     <div className="lg:flex justify-between px-5">
-      <div className="h-[calc(100vh-80px)]">
+      <div className="h-screen">
         {/* Check if there are images and map over them */}
         {singlePost?.images?.length > 0 &&
           singlePost?.images?.map((image: string, index: number) => (

@@ -52,7 +52,7 @@ const RightSidebar = () => {
                     />
                     <div>
                       <Link
-                        href={`/user/${person?._id}`}
+                        href={`/userDetails/${person?._id}`}
                         className="dark:text-white hover:underline cursor-pointer text-secondary"
                       >
                         {person.name}
@@ -83,9 +83,12 @@ const RightSidebar = () => {
                   </div>
                 </div>
               ))}
-            <div className="text-black dark:text-white hover:text-blue-500 cursor-pointer duration-300 transition-all">
+            <Link
+              href={`/friends`}
+              className="text-black dark:text-white hover:text-blue-500 cursor-pointer duration-300 transition-all"
+            >
               see more...
-            </div>
+            </Link>
           </div>
         </div>
       )}

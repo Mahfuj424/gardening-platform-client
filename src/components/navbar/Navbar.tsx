@@ -1,19 +1,19 @@
 "use client";
 
 import {
-  MdOutlineContactPage,
+  // MdOutlineContactPage,
   MdOutlineDashboardCustomize,
-  MdOutlineNotificationsActive,
+  // MdOutlineNotificationsActive,
   MdOutlineWorkspacePremium,
 } from "react-icons/md";
-import { IoIosImages } from "react-icons/io";
+// import { IoIosImages } from "react-icons/io";
 import { TiWeatherSunny } from "react-icons/ti";
 import { BsMoonStarsFill } from "react-icons/bs";
 import { logoutUser } from "@/services/actions/logoutUser";
 import { getUserInfo } from "@/services/authServices";
 import { LuLogOut } from "react-icons/lu";
-import { RiContactsBook3Line, RiMessengerLine } from "react-icons/ri";
-import Link from "next/link";
+// import { RiContactsBook3Line, RiMessengerLine } from "react-icons/ri";
+// import Link from "next/link";
 import { useCreatePaymentMutation } from "@/redux/api/paymentApi";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -82,23 +82,8 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
           </h1>
         </div>
 
-        <div className="flex gap-10 dark:text-gray-100">
-          <Link href={`/contact-us`} className="flex items-center gap-1">
-            <RiContactsBook3Line className="text-2xl" />
-            <h1>Contact</h1>
-          </Link>
-          <Link href={`/about-us`} className="flex items-center">
-            <MdOutlineContactPage className="text-2xl" />
-            <h1>About</h1>
-          </Link>
-          <Link href={`/gallery`} className="flex items-center gap-1">
-            <IoIosImages className="text-2xl" />
-            <h1>Gallery</h1>
-          </Link>
-        </div>
-
         <div className="flex gap-5 items-center relative">
-          <div className="relative group">
+          {/* <div className="relative group">
             <div className="bg-gray-200 dark:bg-secondary text-green-500 rounded-full p-1.5">
               <MdOutlineNotificationsActive
                 size={28}
@@ -110,9 +95,9 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
                 Notifications
               </span>
             </div>
-          </div>
+          </div> */}
 
-          <div className="relative group">
+          {/* <div className="relative group">
             <div className="bg-gray-200 dark:bg-secondary text-green-500 rounded-full p-1.5">
               <RiMessengerLine
                 size={28}
@@ -125,7 +110,7 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
                 Messages
               </span>
             </div>
-          </div>
+          </div> */}
 
           <div className="relative" ref={profileDropdownRef}>
             <img
@@ -169,7 +154,7 @@ const NavBar: React.FC<NavBarProps> = ({ toggleDarkMode }) => {
                         `${
                           userInfo?.role === "user"
                             ? "/dashboard"
-                            : "admin-dashboard"
+                            : "/admin-dashboard"
                         }`
                       )
                     }

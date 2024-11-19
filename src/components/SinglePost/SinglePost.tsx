@@ -28,6 +28,7 @@ import CreatePostModal from "../modal/CreatePostModal";
 import TruncatedContent from "../TruncatedContent/TruncatedContent";
 
 const SinglePost = ({ user, isLoading }: any) => {
+  console.log("user post", user);
   const [hoveredPost, setHoveredPost] = useState<string | null>(null); // For posts
   const [hoveredComment, setHoveredComment] = useState<string | null>(null); // For comments
   const [modalOpen, setModalOpen] = useState<string | null>(null); // Modal for options
@@ -178,6 +179,7 @@ const SinglePost = ({ user, isLoading }: any) => {
   };
 
   const postData = user?.posts;
+  console.log("single post one", postData);
 
   return (
     <div>
